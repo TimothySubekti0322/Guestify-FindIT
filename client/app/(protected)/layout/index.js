@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Home from "../home";
 import Event from "../event";
 import Profile from "../profile";
+import Scanner from "../scanner";
 
 const Index = () => {
   const { screen = "home" } = useLocalSearchParams();
@@ -14,6 +15,7 @@ const Index = () => {
       {page == "home" && <Home setPage={setPage} />}
       {page == "event" && <Event setPage={setPage} />}
       {page == "profile" && <Profile />}
+      {page == "scanner" && <Scanner />}
       <Navbar page={page} setPage={setPage} />
     </>
   );
