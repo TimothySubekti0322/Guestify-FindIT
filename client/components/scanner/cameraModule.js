@@ -9,6 +9,7 @@ const CameraModule = ({
   flash,
   handleTorch,
   width,
+  cameraLoading,
   setCameraLoading,
 }) => {
   const [permission, requestPermission] = useCameraPermissions();
@@ -29,7 +30,9 @@ const CameraModule = ({
 
   return (
     <View
-      className="bg-[#555555] overflow-hidden mt-16"
+      className={`${
+        cameraLoading && "hidden"
+      } bg-[#555555] overflow-hidden mt-16 `}
       style={{ flex: 1, borderRadius: 40 }}
     >
       <CameraView
@@ -38,7 +41,8 @@ const CameraModule = ({
           barcodeTypes: ["qr"],
         }}
         onBarcodeScanned={(data) => handleScanned(data.data)}
-        flash="on"
+        enableTorch={flash}
+        onCameraReady={() => setCameraLoading(false)}
       >
         <View className="w-full h-full">
           <View className="absolute top-0 bottom-0 left-0 right-0 z-0 items-center justify-center w-full h-full bg-black opacity-40">
@@ -47,7 +51,6 @@ const CameraModule = ({
                 style={{ width: width * 0.5, height: width * 0.5 }}
                 facing="back"
                 flash="on"
-                onCameraReady={() => setCameraLoading(false)}
               ></CameraView>
             </View>
           </View>

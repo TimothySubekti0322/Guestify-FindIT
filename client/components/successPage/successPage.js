@@ -3,12 +3,7 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Stack, router } from "expo-router";
 
-const SuccessPage = ({ message, buttonText, buttonRoute }) => {
-  const buttonHandler = () => {
-    if (buttonRoute) {
-      router.replace(buttonRoute);
-    }
-  };
+const SuccessPage = ({ message, buttonText, buttonHandler }) => {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -25,7 +20,7 @@ const SuccessPage = ({ message, buttonText, buttonRoute }) => {
         </Text>
         <Text
           className="mt-4 text-center"
-          style={{ fontFamily: "Manrope-Regular" }}
+          style={{ fontFamily: "Manrope-Medium" }}
         >
           {message}
         </Text>

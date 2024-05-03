@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Text, View, Dimensions } from "react-native";
 import { Stack, router } from "expo-router";
 import Button from "../../../components/button/button";
-import Navbar from "../../../components/navbar/navbar";
 import MainPageHeader from "../../../components/header/mainPageHeader";
 import CameraModule from "../../../components/scanner/cameraModule";
 import InputField from "../../../components/inputField/inputField";
@@ -32,8 +31,8 @@ const Scanner = () => {
   const [qrError, setQrError] = useState("");
   const [submitError, setSubmitError] = useState("");
 
-  // Fetching Camera
-  const [cameraLoading, setCameraLoading] = useState(false);
+  // Camera Loading
+  const [cameraLoading, setCameraLoading] = useState(true);
 
   const handleTorch = async () => {
     setFlash(!flash);
@@ -59,9 +58,9 @@ const Scanner = () => {
       // Fetch Data here
       console.log(data);
       setTimeout(() => {
-        setLoading(false);
         hideModal();
-        router.push("./guestConfirmation");
+        setLoading(false);
+        router.push("./scanner/guestConfirmation");
       }, 2000);
     } catch (error) {
       setQrError(true);
@@ -78,7 +77,7 @@ const Scanner = () => {
       setTimeout(() => {
         setLoading(false);
         hideModal();
-        router.push("./guestConfirmation");
+        router.push("./scanner/guestConfirmation");
       }, 2000);
     } catch (error) {
       setSubmitError(true);
@@ -133,44 +132,47 @@ const Scanner = () => {
               Scan QR Code untuk ikuti acaramu!
             </Text>
           </View>
-          {cameraLoading && (
-            <View
-              className="items-center justify-center w-full h-full"
-              style={{ flex: 1 }}
-            >
-              <ActivityIndicator animating={true} color="#690895" size={30} />
-              <Text
-                className="mt-6 text-lg"
-                style={{ fontFamily: "Manrope-SemiBold" }}
-              >
-                Loading...
-              </Text>
-            </View>
-          )}
-          {screen == "scan" && !cameraLoading && (
+          {screen == "scan" && (
             <>
               <CameraModule
                 handleScanned={handleScanned}
                 flash={flash}
                 handleTorch={handleTorch}
                 width={width}
+                cameraLoading={cameraLoading}
                 setCameraLoading={setCameraLoading}
               />
-              <Text
-                className="mt-8 text-center"
-                style={{ fontFamily: "Inter-Regular" }}
-              >
-                atau ketik kode secara manual
-              </Text>
-              <View className="mb-2 -mt-4">
-                <Button
-                  handlePress={() => setScreen("manual")}
-                  title="Masukan Kode"
-                />
-              </View>
+              {cameraLoading ? (
+                <View
+                  className="items-center justify-center"
+                  style={{ flex: 1 }}
+                >
+                  <ActivityIndicator
+                    animating={true}
+                    color="#690895"
+                    size="large"
+                  />
+                  <Text className="mt-2 text-xl font-bold">Loading ...</Text>
+                </View>
+              ) : (
+                <>
+                  <Text
+                    className="mt-8 text-center"
+                    style={{ fontFamily: "Inter-Regular" }}
+                  >
+                    atau ketik kode secara manual
+                  </Text>
+                  <View className="mb-2 -mt-4">
+                    <Button
+                      handlePress={() => setScreen("manual")}
+                      title="Masukan Kode"
+                    />
+                  </View>
+                </>
+              )}
             </>
           )}
-          {screen == "manual" && !cameraLoading && (
+          {screen == "manual" && (
             <View className="justify-between pt-16 pb-8" style={{ flex: 1 }}>
               <View>
                 <InputField

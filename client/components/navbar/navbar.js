@@ -73,14 +73,16 @@ const Navbar = ({ page, setPage }) => {
         className="items-center w-1/5"
         onPress={() => setPage("dashboard")}
       >
-        {page == "dashboard" ? (
+        {page == "dashboard" || page == "eventDashboard" ? (
           <Image source={require("../../assets/navbar/dashboard-filled.png")} />
         ) : (
           <Image source={require("../../assets/navbar/dashboard.png")} />
         )}
         <Text
           className={`${
-            page == "dashboard" ? "text-[#E9A400]" : "text-white"
+            page == "dashboard" || page == "eventDashboard"
+              ? "text-[#E9A400]"
+              : "text-white"
           } mt-1`}
           style={{ fontFamily: "Manrope-Bold", fontSize: 12 }}
         >

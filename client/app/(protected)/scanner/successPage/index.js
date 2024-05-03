@@ -4,12 +4,12 @@ import { router } from "expo-router";
 
 const Index = () => {
   const buttonHandler = () => {
-    router.replace("../layout");
+    router.replace({ pathname: "../layout", params: { screen: "scanner" } });
   };
   return (
     <SuccessPage
-      message="RSVP Anda berhasil disimpan dalam acaranya. Sampai jumpa!"
-      buttonText="Kembali ke Home Page"
+      message="Data Anda berhasil disimpan dalam buku tamu. Sampai jumpa di acaranya nanti!"
+      buttonText="Kembali ke Scanner"
       buttonHandler={buttonHandler}
     />
   );

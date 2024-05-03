@@ -5,9 +5,11 @@ import Home from "../home";
 import Event from "../event";
 import Profile from "../profile";
 import Scanner from "../scanner";
+import Dashboard from "../dashboard";
+import EventDashboard from "../dashboard/eventDashboard";
 
 const Index = () => {
-  const { screen = "home" } = useLocalSearchParams();
+  const { screen = "home", idEvent = "dummy" } = useLocalSearchParams();
   const [page, setPage] = useState(screen);
   return (
     <>
@@ -16,6 +18,8 @@ const Index = () => {
       {page == "event" && <Event setPage={setPage} />}
       {page == "profile" && <Profile />}
       {page == "scanner" && <Scanner />}
+      {page == "dashboard" && <Dashboard setPage={setPage} />}
+      {page == "eventDashboard" && <EventDashboard idEvent={idEvent} />}
       <Navbar page={page} setPage={setPage} />
     </>
   );

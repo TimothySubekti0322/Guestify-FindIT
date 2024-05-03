@@ -3,12 +3,14 @@ import React from "react";
 import { router } from "expo-router";
 
 const FiturLainnya = ({ backgroundColor, assets, title, setPage }) => {
+  const page =
+    assets === "rsvp" ? "event" : assets == "book" ? "dashboard" : "scanner";
   return (
     <View className="items-center mt-4">
       <Pressable
         className={`p-6 rounded-full`}
         style={{ backgroundColor: backgroundColor }}
-        onPress={() => setPage("event")}
+        onPress={() => setPage(page)}
       >
         {assets === "rsvp" && (
           <Image

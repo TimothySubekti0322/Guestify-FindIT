@@ -1,13 +1,14 @@
-import { View, Text, ImageBackground } from "react-native";
+import { View, Text, ImageBackground, Dimensions } from "react-native";
 import React from "react";
 
 const MainPageHeader = ({ title }) => {
+  const widht = Dimensions.get("window").width;
   return (
     <ImageBackground
       source={require("../../assets/event/header-background.png")}
       resizeMode="contain"
       style={{
-        width: "100%",
+        width: widht,
         height: 160,
       }}
     >

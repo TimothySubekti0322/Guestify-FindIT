@@ -76,7 +76,15 @@ const DatePicker = ({ title, handleChange }) => {
           </Text>
           <View className="flex-row items-center justify-center">
             <Pressable onPress={() => handlePrevMonth()}>
-              <Icon source="chevron-left" size={20} />
+              <Icon
+                source="chevron-left"
+                size={20}
+                color={
+                  currentMonth == dateFn.getMonthNumber(month)
+                    ? "#a1a1a1"
+                    : "black"
+                }
+              />
             </Pressable>
             <Pressable className="ml-6" onPress={() => handleNextMonth()}>
               <Icon source="chevron-right" size={20} />
@@ -104,16 +112,26 @@ const DatePicker = ({ title, handleChange }) => {
                 className="w-[15.3%] items-center"
                 onPress={() => handleChooseDate(item)}
               >
-                <Text
+                <View
                   className={`${
                     selectedYear == year &&
                     selectedMonth == month &&
                     selectedDate == item &&
-                    "bg-white rounded-full"
-                  } p-2 text-center`}
+                    "bg-[#690895] rounded-full w-8 h-8 items-center justify-center"
+                  }`}
                 >
-                  {item}
-                </Text>
+                  <Text
+                    className={`${
+                      selectedYear == year &&
+                      selectedMonth == month &&
+                      selectedDate == item
+                        ? "text-white"
+                        : "text-black p-2"
+                    } text-center`}
+                  >
+                    {item}
+                  </Text>
+                </View>
               </Pressable>
             ))}
           </View>

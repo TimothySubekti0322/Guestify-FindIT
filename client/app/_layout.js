@@ -29,6 +29,7 @@ const RootLayout = () => {
     "Roca-Two-Black-Italic": require("../assets/fonts/Roca-Two/Roca-Two-Black-Italic.ttf"),
     "Roca-Two-Bold": require("../assets/fonts/Roca-Two/Roca-Two-Bold.otf"),
     "Roca-Two-Bold-Italic": require("../assets/fonts/Roca-Two/Roca-Two-Bold-Italic.ttf"),
+    "Nunito-Sans-Regular": require("../assets/fonts/Nunito-Sans/Nunito-Sans-Regular.ttf"),
   });
 
   if (!fontsLoaded && !fontError) {

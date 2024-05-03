@@ -14,13 +14,15 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.guestify.client"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.guestify.client"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -54,7 +56,8 @@
             "./assets/fonts/Manrope/Manrope-Regular.otf",
             "./assets/fonts/Manrope/Manrope-SemiBold.otf",
             "./assets/fonts/Manrope/Manrope-Thin.otf",
-            "./assets/fonts/Roca-Two/Roca-Two-Bold.otf"
+            "./assets/fonts/Roca-Two/Roca-Two-Bold.otf",
+            "./assets/fonts/Nunito-Sans/Nunito-Sans-Regular.ttf"
           ]
         }
       ],

@@ -1,4 +1,12 @@
-import { View, Text, SafeAreaView, ScrollView, Image } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  Image,
+  Pressable,
+  ToastAndroid,
+} from "react-native";
 import React, { useContext } from "react";
 import { CreateEventContext } from "../../../../../store/context/createEventContext";
 import { Stack, router } from "expo-router";
@@ -7,6 +15,7 @@ import MetodePembayaranImage from "../../../../../static/image/metodePembayaran"
 import AccordionVA from "../../../../../components/pembayaran/accordionVA";
 import Button from "../../../../../components/button/button";
 import { formatCurrency } from "../../../../../utils/numberFormater";
+import * as Clipboard from "expo-clipboard";
 
 const Pembayaran2 = () => {
   const createEventCtx = useContext(CreateEventContext);
@@ -14,6 +23,12 @@ const Pembayaran2 = () => {
   const bank = paymentMethodCtx.slice(0, 3);
   const paymentMethod = paymentMethodCtx.slice(3);
   const price = formatCurrency(createEventCtx.price, "Rp", false, true);
+
+  const copyToClipboard = async () => {
+    console.log("copied to clipboard")
+    ToastAndroid.show("Copied to clipboard", ToastAndroid.SHORT);
+    await Clipboard.setStringAsync("123 456 789 1011");
+  };
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -59,11 +74,13 @@ const Pembayaran2 = () => {
             </View>
             <View className="flex-row items-center justify-between px-4 py-3 bg-[#FFF8E6] border-[1px] border-[#E9A400] rounded-xl">
               <Text style={{ fontFamily: "Inter-Bold" }}>123 456 789 1011</Text>
-              <Image
-                source={MetodePembayaranImage.copy}
-                style={{ resizeMode: "contain" }}
-                className="w-6"
-              />
+              <Pressable onPress={() => copyToClipboard()}>
+                <Image
+                  source={MetodePembayaranImage.copy}
+                  style={{ resizeMode: "contain" }}
+                  className="w-6"
+                />
+              </Pressable>
             </View>
             <View className="w-full border-t-[1px] border-[#C2C2C2] mt-4"></View>
             {/* Total Payment */}
