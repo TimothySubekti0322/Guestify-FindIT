@@ -1,17 +1,110 @@
 import { StatusBar } from "expo-status-bar";
-import { ImageBackground, Pressable, Text, View } from "react-native";
-import { Stack, router, useLocalSearchParams } from "expo-router";
+import {
+  ImageBackground,
+  Pressable,
+  Text,
+  View,
+  Keyboard,
+  Alert,
+} from "react-native";
+import { Stack, router } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, TextInput } from "react-native-paper";
+import { Button, Checkbox, ActivityIndicator } from "react-native-paper";
+import AuthTextInput from "../../../components/auth/authTextInput";
+import AuthImage from "../../../static/image/auth";
+import AuthPasswordInput from "../../../components/auth/authPasswordInput";
 import { useState } from "react";
+import axios from "axios";
+import BASE_URL from "../../../static/API";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const initialForm = {
+  email: "",
+  password: "",
+};
 
 const index = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+  // Form state
+  const [form, setForm] = useState(initialForm);
 
-  const handleLogin = () => {
-    router.replace({ pathname: "../layout", params: { screen: "home" } });
+  // Handle form change
+  const handleChange = (name, value) => {
+    setForm({ ...form, [name]: value });
   };
+
+  // Error
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  // remember me
+  const [rememberMe, setRememberMe] = useState(false);
+
+  // loading
+  const [loading, setLoading] = useState(false);
+
+  // Submit Validation
+  const isDataValid = () => {
+    let dataValid = true;
+    if (form.email === "") {
+      setEmailError("Email tidak boleh kosong");
+      dataValid = false;
+    } else {
+      setEmailError("");
+    }
+    if (form.password === "") {
+      setPasswordError("Password tidak boleh kosong");
+      dataValid = false;
+    } else {
+      setPasswordError("");
+    }
+    return dataValid;
+  };
+
+  // handle form submit
+  const handleLogin = async () => {
+    Keyboard.dismiss();
+    console.log("form: ", form);
+
+    // Axios request
+    if (isDataValid()) {
+      setLoading(true);
+      try {
+        const response = await axios.post(`${BASE_URL}/auth/login`, form);
+
+        if (response.data.message == "User not found") {
+          setLoading(false);
+          setEmailError("Email tidak ditemukan");
+        } else if (response.data.message == "Wrong Password") {
+          setLoading(false);
+          setPasswordError("Password salah");
+        } else {
+          await AsyncStorage.setItem("token", response.data.token);
+          await AsyncStorage.setItem(
+            "userData",
+            JSON.stringify(response.data.payload)
+          );
+          if (rememberMe) {
+            await AsyncStorage.setItem("rememberMe", "true");
+          }
+          setForm(initialForm);
+          setEmailError("");
+          setPasswordError("");
+          setLoading(false);
+          router.replace({ pathname: "../layout", params: { screen: "home" } });
+        }
+      } catch (error) {
+        setLoading(false);
+        Alert.alert("Error", error.message, [
+          {
+            text: "OK",
+          },
+        ]);
+      }
+    }
+  };
+
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -47,53 +140,34 @@ const index = () => {
             >
               <View className="items-center w-full">
                 <Text
-                  className="text-3xl text-[#690895]"
+                  className="text-3xl text-[#690895] mb-4"
                   style={{ fontFamily: "Inter-Bold" }}
                 >
                   Login
                 </Text>
-                <TextInput
-                  theme={{ roundness: 40 }}
-                  className="bg-[#F4F4F4] outline-0 w-full mt-10"
-                  mode="outlined"
-                  placeholder="Email / Username"
-                  left={
-                    <TextInput.Icon
-                      icon={require("../../../assets/login/user.png")}
-                    />
-                  }
-                  style={{ borderRadius: 100 }}
+                <AuthTextInput
+                  placeholder={"Email"}
+                  handleChange={handleChange}
+                  name={"email"}
+                  icon={AuthImage.user}
+                  error={emailError}
                 />
-                <TextInput
-                  theme={{ roundness: 40 }}
-                  className="bg-[#F4F4F4] outline-0 w-full mt-6"
-                  mode="outlined"
-                  placeholder="Kata Sandi"
-                  secureTextEntry={!passwordVisibility}
-                  left={
-                    <TextInput.Icon
-                      icon={require("../../../assets/login/lock.png")}
-                    />
-                  }
-                  right={
-                    passwordVisibility ? (
-                      <TextInput.Icon
-                        icon={require("../../../assets/login/eye-open.png")}
-                        onPress={() =>
-                          setPasswordVisibility(!passwordVisibility)
-                        }
-                      />
-                    ) : (
-                      <TextInput.Icon
-                        icon={require("../../../assets/login/eye-closed.png")}
-                        onPress={() =>
-                          setPasswordVisibility(!passwordVisibility)
-                        }
-                      />
-                    )
-                  }
-                  style={{ borderRadius: 100 }}
+                <AuthPasswordInput
+                  placeholder={"Kata Sandi"}
+                  passwordVisibility={passwordVisibility}
+                  setPasswordVisibility={setPasswordVisibility}
+                  handleChange={handleChange}
+                  name={"password"}
+                  error={passwordError}
                 />
+                <View className="flex-row items-center self-start mt-4">
+                  <Checkbox
+                    status={rememberMe ? "checked" : "unchecked"}
+                    onPress={() => setRememberMe(!rememberMe)}
+                  />
+                  <Text>Remember me</Text>
+                </View>
+
                 <View className="flex-row items-center mt-6">
                   <Text
                     className="text-[#6D6D6D]"
@@ -119,9 +193,13 @@ const index = () => {
                 className="w-full rounded-full"
                 buttonColor="#690895"
                 textColor="white"
-                onPress={handleLogin}
+                onPress={() => handleLogin()}
               >
-                <Text className="text-xl">Log In</Text>
+                {loading ? (
+                  <ActivityIndicator color="white" size={20} />
+                ) : (
+                  <Text className="text-xl">Log In</Text>
+                )}
               </Button>
             </View>
           </SafeAreaView>

@@ -1,9 +1,14 @@
 import { Stack } from "expo-router";
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+
+// Keep the splash screen visible while fetch resources
+SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
+  const [appIsReady, setAppIsReady] = useState(false);
   let [fontsLoaded, fontError] = useFonts({
     "Inter-Black": require("../assets/fonts/Inter/Inter-Black.otf"),
     "Inter-BlackItalic": require("../assets/fonts/Inter/Inter-BlackItalic.otf"),
@@ -31,6 +36,22 @@ const RootLayout = () => {
     "Roca-Two-Bold-Italic": require("../assets/fonts/Roca-Two/Roca-Two-Bold-Italic.ttf"),
     "Nunito-Sans-Regular": require("../assets/fonts/Nunito-Sans/Nunito-Sans-Regular.ttf"),
   });
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      // After fonts are loaded, wait for 2 seconds before setting the app as ready
+      setTimeout(() => {
+        setAppIsReady(true);
+      }, 1000);
+    }
+  }, [fontsLoaded]);
+
+  useEffect(() => {
+    if (appIsReady) {
+      // When the app is ready, hide the splash screen
+      SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
 
   if (!fontsLoaded && !fontError) {
     return null;

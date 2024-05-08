@@ -2,7 +2,15 @@ import { View, Text, Pressable } from "react-native";
 import React from "react";
 import { Icon } from "react-native-paper";
 
-const InputTamuCard = ({ number, title, text, icon, buttonText }) => {
+const InputTamuCard = ({
+  number,
+  title,
+  text,
+  icon,
+  buttonText,
+  pressHandler,
+  uploaded,
+}) => {
   return (
     <View className="bg-white rounded-2xl border-[1px] border-[#6D6D6D] p-4 flex-row">
       <View className="h-10 w-10 bg-[#690895] self-start rounded-full items-center justify-center">
@@ -29,21 +37,38 @@ const InputTamuCard = ({ number, title, text, icon, buttonText }) => {
           </Text>
         </View>
 
-        <View className="bg-[#E9A400] rounded-full overflow-hidden mt-4 self-start">
-          <Pressable
-            className="flex-row items-center justify-center px-4 py-3"
-            android_ripple={{ color: "#C78200" }}
-            onPress={() => console.log("Download Template")}
-          >
-            <Icon source={icon} size={20} />
-            <Text
-              className="ml-2 text-xs text-white"
-              style={{ fontFamily: "Manrope-Bold" }}
+        {uploaded && number == 2 ? (
+          <View className="bg-[#E5E5E5] rounded-full overflow-hidden mt-4 self-start">
+            <Pressable
+              className="flex-row items-center justify-center px-4 py-3"
+              disabled={true}
             >
-              {buttonText}
-            </Text>
-          </Pressable>
-        </View>
+              <Icon source={icon} size={20} />
+              <Text
+                className="ml-2 text-xs text-[#868686]"
+                style={{ fontFamily: "Manrope-Bold" }}
+              >
+                Uploaded
+              </Text>
+            </Pressable>
+          </View>
+        ) : (
+          <View className="bg-[#E9A400] rounded-full overflow-hidden mt-4 self-start">
+            <Pressable
+              className="flex-row items-center justify-center px-4 py-3"
+              android_ripple={{ color: "#C78200" }}
+              onPress={() => pressHandler()}
+            >
+              <Icon source={icon} size={20} />
+              <Text
+                className="ml-2 text-xs text-white"
+                style={{ fontFamily: "Manrope-Bold" }}
+              >
+                {buttonText}
+              </Text>
+            </Pressable>
+          </View>
+        )}
       </View>
     </View>
   );

@@ -1,10 +1,20 @@
 import { View, Text, Image, Pressable } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import StatusChip from "./statusChip";
 import { formatDateMonthYear } from "../../utils/dateFormater";
 import { router } from "expo-router";
+import { DashboardContext } from "../../store/context/dashboardContext";
 
-const EventCard = ({ image, title, owner, location, date, idEvent }) => {
+const EventCard = ({
+  image,
+  title,
+  owner,
+  location,
+  date,
+  idEvent,
+  data,
+  handlePress,
+}) => {
   const now = new Date();
   const eventDate = new Date(date);
   const status =
@@ -13,15 +23,21 @@ const EventCard = ({ image, title, owner, location, date, idEvent }) => {
       : eventDate.getDate() < now.getDate()
       ? "Sudah Berlangsung"
       : "Sedang Berlangsung";
+
+  const dashboardCtx = useContext(DashboardContext);
+  // const handlePress = () => {
+  //   console.log(data);
+  //   dashboardCtx.setData(data);
+  //   router.push({
+  //     pathname: "./layout",
+  //     params: { screen: "eventDashboard", idEvent: idEvent },
+  //   });
+  // };
+
   return (
     <Pressable
       className="flex-row mb-8 border-[1px] border-[#6D6D6D] rounded-2xl p-4"
-      onPress={() =>
-        router.push({
-          pathname: "./layout",
-          params: { screen: "eventDashboard", idEvent: idEvent },
-        })
-      }
+      onPress={() => handlePress(data, idEvent)}
     >
       <Image source={image} style={{ height: "auto" }} className="rounded-xl" />
       <View className="ml-3" style={{ flex: 1 }}>

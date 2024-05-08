@@ -3,8 +3,18 @@ import React from "react";
 import EventDashboardImage from "../../static/image/eventDashboard";
 import EventDashboardCard from "./eventDashboardCard";
 import SubMenu from "./subMenu";
+import { getPercentage } from "../../utils/numberFormater";
 
 const RsvpDashboardMainSection = ({ subMenu, data, setSubMenu }) => {
+  const rsvpPax = data.totalRsvpPax + " pax";
+  const menungguPercentage = getPercentage(
+    data.totalPending,
+    data.listGuest.length
+  );
+  const ditolakPercentage = getPercentage(
+    data.totalDeclined,
+    data.listGuest.length
+  );
   return (
     <View className="relative bg-[#F7F7F7] px-8 pt-10" style={{ flex: 1 }}>
       {/* SubMenu */}
@@ -21,7 +31,7 @@ const RsvpDashboardMainSection = ({ subMenu, data, setSubMenu }) => {
             className="p-0 mt-3 text-4xl"
             style={{ fontFamily: "Inter-SemiBold" }}
           >
-            {data.totalInvitation}
+            {data.listGuest.length}
           </Text>
           <Text className="pb-1" style={{ fontFamily: "Inter-Medium" }}>
             undangan
@@ -34,9 +44,9 @@ const RsvpDashboardMainSection = ({ subMenu, data, setSubMenu }) => {
           image={EventDashboardImage.userConfirmed}
           title="Datang"
           numberColor="#3EC04B"
-          registered={data.confirmed}
-          total={data.totalInvitation}
-          detail="264 pax"
+          registered={data.totalConfirmed}
+          total={data.listGuest.length}
+          detail={rsvpPax}
         />
         <EventDashboardCard
           cardBackground="#FFF7EF"
@@ -44,9 +54,9 @@ const RsvpDashboardMainSection = ({ subMenu, data, setSubMenu }) => {
           image={EventDashboardImage.userPending}
           title="Menunggu"
           numberColor="#E9A400"
-          registered={data.pending}
-          total={data.totalInvitation}
-          detail="20.00 %"
+          registered={data.totalPending}
+          total={data.listGuest.length}
+          detail={menungguPercentage}
         />
         <EventDashboardCard
           cardBackground="#FFF6F4"
@@ -54,9 +64,9 @@ const RsvpDashboardMainSection = ({ subMenu, data, setSubMenu }) => {
           image={EventDashboardImage.userDeclined}
           title="Ditolak"
           numberColor="#ED4C4D"
-          registered={data.declined}
-          total={data.totalInvitation}
-          detail="10.00 %"
+          registered={data.totalDeclined}
+          total={data.listGuest.length}
+          detail={ditolakPercentage}
         />
         <View className="w-full rounded-full bg-[#E9A400] overflow-hidden mt-6">
           <Pressable

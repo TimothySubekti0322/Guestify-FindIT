@@ -1,20 +1,53 @@
-import { View, Text, Image, Pressable } from "react-native";
+import { View, Text, Image, Pressable, Alert } from "react-native";
 import React, { useState } from "react";
-import { Stack, router } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Icon } from "react-native-paper";
 import { Switch } from "react-native-switch";
 import Button from "../../../../components/button/button";
+import axios from "axios";
+import BASE_URL from "../../../../static/API";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const GuestConfirmation = () => {
   const [souvenir, setSouvenir] = useState(false);
   const [kado, setKado] = useState(false);
   const [totalGuest, setTotalGuest] = useState(1);
 
+  const { eventId, email, name, eventName } = useLocalSearchParams();
+
   const handleGuestChange = (type) => {
     if (type === "plus") {
       setTotalGuest(totalGuest + 1);
     } else if (type === "minus" && totalGuest > 1) {
       setTotalGuest(totalGuest - 1);
+    }
+  };
+
+  const handleConfirmation = async () => {
+    try {
+      const formData = {
+        eventId: eventId,
+        email: email,
+        totalGuest: totalGuest,
+        souvenir: souvenir,
+        angpao: kado,
+      };
+
+      console.log(formData);
+
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.post(`${BASE_URL}/checkIn`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data.message == "success") {
+        router.push("./successPage");
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", "Terjadi kesalahan, silahkan coba lagi");
     }
   };
   return (
@@ -40,7 +73,7 @@ const GuestConfirmation = () => {
             className="self-center text-xl text-[#31013F]"
             style={{ fontFamily: "Inter-Bold" }}
           >
-            Acara A
+            {eventName}
           </Text>
           <Text
             className="text-[#690895] text-lg mt-4"
@@ -50,7 +83,7 @@ const GuestConfirmation = () => {
           </Text>
           <View className="flex-row justify-between mt-4">
             <Text style={{ fontFamily: "Manrope-Bold" }}>Nama Tamu</Text>
-            <Text>Micahel Sihotang</Text>
+            <Text>{name}</Text>
           </View>
           <View className="flex-row justify-between mt-4">
             <Text style={{ fontFamily: "Manrope-Bold" }}>Nama Meja</Text>
@@ -100,7 +133,7 @@ const GuestConfirmation = () => {
             />
           </View>
           <View className="flex-row items-center justify-between mt-6">
-            <Text style={{ fontFamily: "Manrope-Bold" }}>Kado</Text>
+            <Text style={{ fontFamily: "Manrope-Bold" }}>Angpao</Text>
             <Switch
               value={kado}
               onValueChange={() => setKado(!kado)}
@@ -113,7 +146,7 @@ const GuestConfirmation = () => {
           <View className="mt-6">
             <Button
               title="Konfirmasi"
-              handlePress={() => router.push("./successPage")}
+              handlePress={() => handleConfirmation()}
             />
           </View>
         </View>

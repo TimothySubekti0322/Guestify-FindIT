@@ -27,3 +27,10 @@ export const formatCurrency = (
 
   return formattedAmount;
 };
+
+export const getPercentage = (num, total) => {
+  if (total === 0) {
+    return "0.00%";
+  }
+  return `${((num / total) * 100).toFixed(2)}%`;
+};

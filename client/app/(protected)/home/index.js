@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Pressable, Image } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { Stack } from "expo-router";
 import TestimonialCard from "../../../components/home/testimonialCard";
 import DaftarQR from "../../../components/home/daftarQR";
@@ -8,13 +8,19 @@ import { StatusBar } from "expo-status-bar";
 import Header from "../../../components/home/header";
 import AbsoluteHeader from "../../../components/home/absoluteHeader";
 import FiturLainnya from "../../../components/home/fiturLainnya";
+import { DashboardContext } from "../../../store/context/dashboardContext";
 
 const Home = ({ setPage }) => {
+  const dashboardCtx = useContext(DashboardContext);
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <StatusBar style="light" />
-      <ScrollView className="w-full" style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        className="w-full"
+        style={{ flex: 1 }}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Header */}
         <Header />
 

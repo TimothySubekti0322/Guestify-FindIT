@@ -6,20 +6,121 @@ import {
   Pressable,
   Text,
   View,
-  Platform,
   ScrollView,
+  Alert,
+  ToastAndroid,
 } from "react-native";
 import { Stack, router } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, TextInput } from "react-native-paper";
+import { ActivityIndicator, Button, TextInput } from "react-native-paper";
 import { useState } from "react";
+import AuthTextInput from "../../../components/auth/authTextInput";
+import AuthImage from "../../../static/image/auth";
+import AuthPasswordInput from "../../../components/auth/authPasswordInput";
+import axios from "axios";
+import BASE_URL from "../../../static/API";
+import { isValidEmail } from "../../../utils/validator";
 
-const index = () => {
+const initialForm = {
+  name: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
+const Signup = () => {
+  // Toggle password visibility
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [confirmPasswordVisibility, setConfirmPasswordVisibility] =
     useState(false);
 
+  // Form state
+  const [form, setForm] = useState(initialForm);
+
+  // Handle form change
+  const handleChange = (name, value) => {
+    setForm({ ...form, [name]: value });
+  };
+
+  // Error
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+  // Loading
+  const [loading, setLoading] = useState(false);
+
+  // Submit Validation
+  const isDataValid = () => {
+    let dataValid = true;
+    if (form.name === "") {
+      setNameError("Nama tidak boleh kosong");
+      dataValid = false;
+    } else {
+      setNameError("");
+    }
+    if (form.email === "") {
+      setEmailError("Email tidak boleh kosong");
+      dataValid = false;
+    } else if (!isValidEmail(form.email)) {
+      setEmailError("Email tidak valid");
+      dataValid = false;
+    } else {
+      setEmailError("");
+    }
+    if (form.password === "") {
+      setPasswordError("Password tidak boleh kosong");
+      dataValid = false;
+    } else {
+      setPasswordError("");
+    }
+    if (form.confirmPassword === "") {
+      setConfirmPasswordError("Konfirmasi password tidak boleh kosong");
+      dataValid = false;
+    } else if (form.password !== form.confirmPassword) {
+      setConfirmPasswordError("Password tidak sama");
+      dataValid = false;
+    } else {
+      setConfirmPasswordError("");
+    }
+    return dataValid;
+  };
+
+  // Handle form submit
+  const handleSubmit = async () => {
+    Keyboard.dismiss();
+    console.log("form: ", form);
+
+    // Axios request
+    if (isDataValid()) {
+      try {
+        setLoading(true);
+        const response = await axios.post(`${BASE_URL}/auth/signup`, form);
+        if (response.data.message == "User already exists") {
+          setLoading(false);
+          setEmailError("Email sudah terdaftar");
+        } else if (response.data.message == "success") {
+          ToastAndroid.show("Berhasil mendaftar ✅", ToastAndroid.SHORT);
+          setForm(initialForm);
+          setEmailError("");
+          setPasswordError("");
+          setNameError("");
+          setConfirmPasswordError("");
+          setLoading(false);
+          router.replace("../login");
+        }
+      } catch (error) {
+        setLoading(false);
+        Alert.alert("Error", error.message, [
+          {
+            text: "OK",
+          },
+        ]);
+      }
+    }
+  };
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -55,118 +156,53 @@ const index = () => {
             </View>
 
             <ScrollView
-              className="bg-white rounded-t-[50px] w-full px-8 py-10"
+              className="bg-white rounded-t-[50px] w-full px-8"
+              contentContainerStyle={{
+                flexGrow: 1,
+                justifyContent: "space-between",
+              }}
               showsVerticalScrollIndicator={false}
               style={{ flex: 1 }}
             >
-              <View>
+              <View className="mt-10">
                 <View className="items-center w-full">
                   <Text
-                    className="text-3xl text-[#690895]"
+                    className="text-3xl text-[#690895] mb-4"
                     style={{ fontFamily: "Inter-Bold" }}
                   >
                     Sign Up
                   </Text>
-                  <TextInput
-                    theme={{ roundness: 40 }}
-                    className="bg-[#F4F4F4] outline-0 w-full mt-10"
-                    mode="outlined"
-                    placeholder="Nama"
-                    left={
-                      <TextInput.Icon
-                        icon={require("../../../assets/signup/text-input.png")}
-                      />
-                    }
-                    style={{ borderRadius: 100 }}
+                  <AuthTextInput
+                    placeholder={"Nama"}
+                    handleChange={handleChange}
+                    name={"name"}
+                    icon={AuthImage.name}
+                    error={nameError}
                   />
-                  <TextInput
-                    theme={{ roundness: 40 }}
-                    className="bg-[#F4F4F4] outline-0 w-full mt-6"
-                    mode="outlined"
-                    placeholder="Email"
-                    left={
-                      <TextInput.Icon
-                        icon={require("../../../assets/signup/email.png")}
-                      />
-                    }
-                    style={{ borderRadius: 100 }}
+                  <AuthTextInput
+                    placeholder={"Email"}
+                    handleChange={handleChange}
+                    name={"email"}
+                    icon={AuthImage.email}
+                    error={emailError}
                   />
-                  <TextInput
-                    theme={{ roundness: 40 }}
-                    className="bg-[#F4F4F4] outline-0 w-full mt-6"
-                    mode="outlined"
-                    placeholder="Username"
-                    left={
-                      <TextInput.Icon
-                        icon={require("../../../assets/login/user.png")}
-                      />
-                    }
-                    style={{ borderRadius: 100 }}
+                  <AuthPasswordInput
+                    placeholder={"Kata Sandi"}
+                    passwordVisibility={passwordVisibility}
+                    setPasswordVisibility={setPasswordVisibility}
+                    handleChange={handleChange}
+                    name={"password"}
+                    error={passwordError}
                   />
-                  <TextInput
-                    theme={{ roundness: 40 }}
-                    className="bg-[#F4F4F4] outline-0 w-full mt-6"
-                    mode="outlined"
-                    placeholder="Kata Sandi"
-                    secureTextEntry={!passwordVisibility}
-                    left={
-                      <TextInput.Icon
-                        icon={require("../../../assets/login/lock.png")}
-                      />
-                    }
-                    right={
-                      passwordVisibility ? (
-                        <TextInput.Icon
-                          icon={require("../../../assets/login/eye-open.png")}
-                          onPress={() =>
-                            setPasswordVisibility(!passwordVisibility)
-                          }
-                        />
-                      ) : (
-                        <TextInput.Icon
-                          icon={require("../../../assets/login/eye-closed.png")}
-                          onPress={() =>
-                            setPasswordVisibility(!passwordVisibility)
-                          }
-                        />
-                      )
-                    }
-                    style={{ borderRadius: 100 }}
+                  <AuthPasswordInput
+                    placeholder={"Konfirmasi Kata Sandi"}
+                    passwordVisibility={confirmPasswordVisibility}
+                    setPasswordVisibility={setConfirmPasswordVisibility}
+                    handleChange={handleChange}
+                    name={"confirmPassword"}
+                    error={confirmPasswordError}
                   />
-                  <TextInput
-                    theme={{ roundness: 40 }}
-                    className="bg-[#F4F4F4] outline-0 w-full mt-6"
-                    mode="outlined"
-                    placeholder="Konfirmasi Kata Sandi"
-                    secureTextEntry={!confirmPasswordVisibility}
-                    left={
-                      <TextInput.Icon
-                        icon={require("../../../assets/login/lock.png")}
-                      />
-                    }
-                    right={
-                      confirmPasswordVisibility ? (
-                        <TextInput.Icon
-                          icon={require("../../../assets/login/eye-open.png")}
-                          onPress={() =>
-                            setConfirmPasswordVisibility(
-                              !confirmPasswordVisibility
-                            )
-                          }
-                        />
-                      ) : (
-                        <TextInput.Icon
-                          icon={require("../../../assets/login/eye-closed.png")}
-                          onPress={() =>
-                            setConfirmPasswordVisibility(
-                              !confirmPasswordVisibility
-                            )
-                          }
-                        />
-                      )
-                    }
-                    style={{ borderRadius: 100 }}
-                  />
+
                   <View className="flex-row items-center mt-6">
                     <Text
                       className="text-[#6D6D6D]"
@@ -190,11 +226,16 @@ const index = () => {
               </View>
 
               <Button
-                className="w-full mt-8 rounded-full"
+                className="mb-10"
                 buttonColor="#690895"
                 textColor="white"
+                onPress={() => handleSubmit()}
               >
-                <Text className="text-xl">Sign Up</Text>
+                {loading ? (
+                  <ActivityIndicator color="white" size={20} />
+                ) : (
+                  <Text className="text-xl">Sign Up</Text>
+                )}
               </Button>
             </ScrollView>
           </SafeAreaView>
@@ -204,4 +245,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Signup;

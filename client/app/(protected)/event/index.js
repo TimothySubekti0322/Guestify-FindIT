@@ -5,19 +5,54 @@ import {
   Image,
   TextInput,
   Pressable,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { router } from "expo-router";
+import axios from "axios";
+import BASE_URL from "../../../static/API";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Event = ({ setPage }) => {
   const [invitationCode, setInvitationCode] = useState("");
-  const handleSubmit = () => {
-    router.push({
-      pathname: "../event/rsvp",
-      params: { invitationCode: invitationCode },
-    });
+  const [invitationCodeError, setInvitationCodeError] = useState("");
+
+  const handleSubmit = async () => {
+    if (invitationCode !== "") {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        const response = await axios.get(
+          `${BASE_URL}/rsvp/checkInvitationCode/${invitationCode}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response.data);
+        if (response.data.message == "Event Code not found") {
+          setInvitationCodeError("Code is Invalid");
+        } else if (response.data.message == "success") {
+          setInvitationCodeError("");
+          const paramsData = {
+            invitationCode: invitationCode,
+            ...response.data.data,
+          };
+          router.push({
+            pathname: "../event/rsvp",
+            params: paramsData,
+          });
+        }
+      } catch (error) {
+        Alert.alert("Error", error.message, [
+          {
+            text: "OK",
+          },
+        ]);
+      }
+    }
   };
   return (
     <>
@@ -91,9 +126,14 @@ const Event = ({ setPage }) => {
             <TextInput
               placeholder="Masukan Kode Undangan Acara"
               keyboardType="default"
-              className="bg-[#F1F1F1] p-3 rounded-xl mt-2 mb-4"
+              className={`${
+                invitationCodeError && "border-2 border-red-500"
+              } bg-[#F1F1F1] p-3 rounded-xl mt-2`}
               onChangeText={(text) => setInvitationCode(text)}
             />
+            {invitationCodeError !== "" && (
+              <Text className="mt-1 text-red-500">{invitationCodeError}</Text>
+            )}
             {/* Submit Button */}
           </View>
         </View>

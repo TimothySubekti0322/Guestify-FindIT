@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "client",
+    "name": "guestify",
     "slug": "client",
     "scheme": "client",
     "version": "1.0.0",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#690895"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -22,7 +22,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.guestify.client"
+      "package": "com.guestify.client",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -44,19 +48,20 @@
             "./assets/fonts/Inter/Inter-Medium.otf",
             "./assets/fonts/Inter/Inter-MediumItalic.otf",
             "./assets/fonts/Inter/Inter-Regular.otf",
-            "./assets/fonts/Inter/Inter-RegularItalic.otf",
             "./assets/fonts/Inter/Inter-SemiBold.otf",
             "./assets/fonts/Inter/Inter-SemiBoldItalic.otf",
             "./assets/fonts/Inter/Inter-Thin.otf",
             "./assets/fonts/Inter/Inter-ThinItalic.otf",
             "./assets/fonts/Manrope/Manrope-Bold.otf",
-            "./assets/fonts/Manrope/Manrope-ExtraBold.otf",
+            "./assets/fonts/Manrope/Manrope-Extrabold.otf",
             "./assets/fonts/Manrope/Manrope-Light.otf",
             "./assets/fonts/Manrope/Manrope-Medium.otf",
             "./assets/fonts/Manrope/Manrope-Regular.otf",
-            "./assets/fonts/Manrope/Manrope-SemiBold.otf",
+            "./assets/fonts/Manrope/Manrope-Semibold.otf",
             "./assets/fonts/Manrope/Manrope-Thin.otf",
             "./assets/fonts/Roca-Two/Roca-Two-Bold.otf",
+            "./assets/fonts/Roca-Two/Roca-Two-Bold-Italic.ttf",
+            "./assets/fonts/Roca-Two/Roca-Two-Black-Italic.ttf",
             "./assets/fonts/Nunito-Sans/Nunito-Sans-Regular.ttf"
           ]
         }
@@ -69,6 +74,14 @@
           "recordAudioAndroid": true
         }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "ec48bd52-3435-43df-8ece-25bc41335f8e"
+      }
+    }
   }
 }

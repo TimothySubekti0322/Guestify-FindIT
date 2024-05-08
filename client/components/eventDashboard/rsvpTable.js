@@ -35,13 +35,13 @@ const RsvpTable = ({ data }) => {
             } flex-row items-center h-10 `}
           >
             <Text className="w-24 pl-4 text-[#31013F]">{item.no}</Text>
-            <Text className="text-[#31013F] w-44">{item.guestName}</Text>
+            <Text className="text-[#31013F] w-44">{item.name}</Text>
             <Text className="text-[#31013F] w-60">{item.email}</Text>
             <View className="w-40 items-center text-[#31013F]">
               <RsvpTableChip value={item.rsvpStatus} />
             </View>
             <View className="items-center justify-center w-36">
-              <QrCodeLinkButton link={item.qrCodeLink} />
+              <QrCodeLinkButton link={item.qrCodeUrl} />
             </View>
           </View>
         ))}

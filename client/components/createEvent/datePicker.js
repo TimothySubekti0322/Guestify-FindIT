@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Icon } from "react-native-paper";
 import * as dateFn from "../../utils/datePicker";
 
-const day = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"];
+const day = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
 
 const DatePicker = ({ title, handleChange }) => {
   const currentMonth = new Date().getMonth();

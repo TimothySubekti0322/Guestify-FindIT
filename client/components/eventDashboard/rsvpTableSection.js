@@ -2,13 +2,13 @@ import { View, Text, ScrollView, Pressable, Dimensions } from "react-native";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, TextInput } from "react-native-paper";
 import SubMenu from "./subMenu";
-import dummyData from "../../static/dummyRsvpTable";
 import RsvpTable from "./rsvpTable";
 import Pagination from "./pagination";
+import NoDataComponent from "../noData/noDataComponent";
 
 const dataPerPage = 10;
 
-const RsvpTableSection = ({ subMenu, setSubMenu }) => {
+const RsvpTableSection = ({ subMenu, setSubMenu, data }) => {
   const width = Dimensions.get("window").width;
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -28,10 +28,10 @@ const RsvpTableSection = ({ subMenu, setSubMenu }) => {
   useEffect(() => {
     const fetchData = async () => {
       // fetch data here
-      setRawDataAPI(dummyData);
-      setRawData(dummyData);
-      setDataShown(dummyData.slice(0, dataPerPage));
-      setTotalPage(Math.ceil(dummyData.length / dataPerPage));
+      setRawDataAPI(data.listGuest);
+      setRawData(data.listGuest);
+      setDataShown(data.listGuest.slice(0, dataPerPage));
+      setTotalPage(Math.ceil(data.listGuest.length / dataPerPage));
     };
     fetchData();
     setLoading(false);
@@ -57,7 +57,7 @@ const RsvpTableSection = ({ subMenu, setSubMenu }) => {
     } else {
       console.log("searching");
       const filteredData = rawDataAPI.filter((item) =>
-        item.guestName.toLowerCase().includes(text.toLowerCase())
+        item.name.toLowerCase().includes(text.toLowerCase())
       );
       setTotalPage(Math.ceil(filteredData.length / dataPerPage));
       setRawData(filteredData);
@@ -81,53 +81,59 @@ const RsvpTableSection = ({ subMenu, setSubMenu }) => {
         </View>
       ) : (
         <ScrollView style={{ flex: 1, backgroundColor: "#F7F7F7" }}>
-          {/* Search */}
-          <View className="px-8 mt-2">
-            <TextInput
-              theme={{ roundness: 20 }}
-              mode="outlined"
-              textColor="black"
-              activeOutlineColor="#6D6D6D"
-              underlineColor="#FFFFFF"
-              activeUnderlineColor="#FFFFFF"
-              placeholder="Search"
-              className="underline-0"
-              underlineStyle={{ borderColor: "white" }}
-              value={searchQuery}
-              onChangeText={(query) => handleSearchQueryChange(query)}
-              style={{ backgroundColor: "white", borderRadius: 20 }}
-              left={<TextInput.Icon icon="magnify" color="#6D6D6D" />}
-            />
-          </View>
+          {data.listGuest.length == 0 ? (
+            <NoDataComponent />
+          ) : (
+            <>
+              {/* Search */}
+              <View className="px-8 mt-2">
+                <TextInput
+                  theme={{ roundness: 20 }}
+                  mode="outlined"
+                  textColor="black"
+                  activeOutlineColor="#6D6D6D"
+                  underlineColor="#FFFFFF"
+                  activeUnderlineColor="#FFFFFF"
+                  placeholder="Search"
+                  className="underline-0"
+                  underlineStyle={{ borderColor: "white" }}
+                  value={searchQuery}
+                  onChangeText={(query) => handleSearchQueryChange(query)}
+                  style={{ backgroundColor: "white", borderRadius: 20 }}
+                  left={<TextInput.Icon icon="magnify" color="#6D6D6D" />}
+                />
+              </View>
 
-          {/* Table */}
-          <RsvpTable data={dataShown} />
+              {/* Table */}
+              <RsvpTable data={dataShown} />
 
-          {/* Pagination */}
-          <Pagination
-            width={width}
-            currentPage={currentPage}
-            handleCurrentPageChange={handleCurrentPageChange}
-            totalPage={totalPage}
-          />
+              {/* Pagination */}
+              <Pagination
+                width={width}
+                currentPage={currentPage}
+                handleCurrentPageChange={handleCurrentPageChange}
+                totalPage={totalPage}
+              />
 
-          {/* Button */}
-          <View className="mx-8 mb-12">
-            <View className="w-full rounded-full bg-[#E9A400] overflow-hidden mt-6">
-              <Pressable
-                className="items-center py-4"
-                android_ripple={{ color: "#C78200" }}
-                onPress={() => console.log("Export RSVP List")}
-              >
-                <Text
-                  className="text-white "
-                  style={{ fontFamily: "Manrope-Bold", fontSize: 16 }}
-                >
-                  Export RSVP List
-                </Text>
-              </Pressable>
-            </View>
-          </View>
+              {/* Button */}
+              <View className="mx-8 mb-12">
+                <View className="w-full rounded-full bg-[#E9A400] overflow-hidden mt-6">
+                  <Pressable
+                    className="items-center py-4"
+                    android_ripple={{ color: "#C78200" }}
+                    onPress={() => console.log("Export RSVP List")}
+                  >
+                    <Text
+                      className="text-white "
+                      style={{ fontFamily: "Manrope-Bold", fontSize: 16 }}
+                    >
+                      Export RSVP List
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            </>
+          )}
         </ScrollView>
       )}
     </>

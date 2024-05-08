@@ -1,15 +1,20 @@
-import { View, Text, Image } from "react-native";
-import React, { useState } from "react";
+import { View, Text, Image, Dimensions } from "react-native";
+import React, { useEffect, useState } from "react";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../../../components/header/header";
 import Button from "../../../../../components/button/button";
+import { decode } from "base-64";
 
-const dummyQr = require("../../../../../assets/qr/qr.png");
+const dummyQr = "../../../../../assets/qr/qr.png";
 
 const index = () => {
-  const [qr, setQr] = useState(dummyQr); // [1
-  const { id } = useLocalSearchParams();
+  const [qr, setQr] = useState(dummyQr);
+  const { qrCodeUrl, id } = useLocalSearchParams();
+  useEffect(() => {
+    setQr(decode(qrCodeUrl));
+  }, []);
+  const { width } = Dimensions.get("window");
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -32,7 +37,12 @@ const index = () => {
             sebelum masuk ke acaranya, ya!
           </Text>
           <View className="border-[1px] items-center border-[#6D6D6D] rounded-xl px-6 py-6 mt-6">
-            <Image source={qr} />
+            <Image
+              source={{ uri: qr }}
+              width={width * 0.6}
+              height={width * 0.6}
+              style={{ resizeMode: "contain" }}
+            />
             <Text
               className="text-[#690895] mt-4 text-xl"
               style={{ fontFamily: "Manrope-Bold" }}

@@ -1,19 +1,28 @@
-import { View, Text, Image } from "react-native";
-import React, { useContext } from "react";
+import { View, Text, Image, Alert, Pressable } from "react-native";
+import React, { useContext, useState } from "react";
 import { CreateEventContext } from "../../../../../store/context/createEventContext";
 import { Stack, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../../../../components/header/header";
 import SummaryDetailComponent from "../../../../../components/pembayaran/summaryDetailComponent";
 import Button from "../../../../../components/button/button";
-import { Modal, Portal, PaperProvider } from "react-native-paper";
+import {
+  Modal,
+  Portal,
+  PaperProvider,
+  ActivityIndicator,
+} from "react-native-paper";
 import ModalButton from "../../../../../components/pembayaran/modalButton";
 import ModalConfirmationContent from "../../../../../components/pembayaran/modalConfirmationContent";
 import { formatDayDateMonthYear } from "../../../../../utils/dateFormater";
 import { formatCurrency } from "../../../../../utils/numberFormater";
+import axios from "axios";
+import BASE_URL from "../../../../../static/API";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Summary = () => {
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -26,6 +35,44 @@ const Summary = () => {
   const location = createEventCtx.location;
   const date = formatDayDateMonthYear(new Date(createEventCtx.date));
   const price = formatCurrency(createEventCtx.price, "Rp", false, true);
+  const paymentMethod = createEventCtx.paymentMethod;
+
+  const handleSubmit = async () => {
+    console.log("Submit");
+    setLoading(true);
+    const token = await AsyncStorage.getItem("token");
+
+    const formData = {
+      type: type,
+      owner: owner,
+      eventName: eventName,
+      guest: guest,
+      location: location,
+      date: createEventCtx.date,
+      cost: createEventCtx.price,
+      paymentMethod: paymentMethod,
+    };
+    try {
+      const response = await axios.post(`${BASE_URL}/event/create`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status == 201) {
+        showModal();
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", error.message, [
+        {
+          text: "OK",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -88,10 +135,27 @@ const Summary = () => {
           </View>
 
           <View className="absolute left-0 right-0 items-center px-8 bottom-12">
-            <Button
-              title="Konfirmasi Pembayaran"
-              handlePress={() => showModal()}
-            />
+            <View
+              className="bg-[#E9A400] rounded-full w-full my-8 overflow-hidden"
+              style={{ elevation: 2 }}
+            >
+              <Pressable
+                android_ripple={{ color: "#C78200" }}
+                className="p-4"
+                onPress={() => handleSubmit()}
+              >
+                {loading ? (
+                  <ActivityIndicator animating={true} color="white" size={20} />
+                ) : (
+                  <Text
+                    className="text-lg text-center text-white"
+                    style={{ fontFamily: "Manrope-Bold" }}
+                  >
+                    Konfirmasi Pembayaran
+                  </Text>
+                )}
+              </Pressable>
+            </View>
           </View>
         </SafeAreaView>
       </PaperProvider>

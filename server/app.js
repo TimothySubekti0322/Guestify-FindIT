@@ -1,32 +1,37 @@
 const express = require("express");
 const app = express();
+const path = require("path");
 const cors = require("cors");
-
-const QRCode = require("qrcode");
 
 const PORT = process.env.PORT || 4000;
 
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
 // Import routes
-const userRoutes = require("./routes/users");
+const authRoutes = require("./routes/auth");
+const qrCodeRoutes = require("./routes/qrCode");
+const eventRoutes = require("./routes/event");
+const rsvpRoutes = require("./routes/rsvp");
+const checkInRoutes = require("./routes/checkIn");
+const guestRoutes = require("./routes/guest");
+const dashboardRoutes = require("./routes/dashboard");
 
 // Use routes
-app.use("/users", userRoutes);
+app.use("/auth", authRoutes);
+app.use("/qrCode", qrCodeRoutes);
+app.use("/event", eventRoutes);
+app.use("/rsvp", rsvpRoutes);
+app.use("/checkIn", checkInRoutes);
+app.use("/guest", guestRoutes);
+app.use("/dashboard", dashboardRoutes);
 
-// app.get("/generateQR", async (req, res) => {
-//   try {
-//     const url =
-//       "https://medium.com/@adnanrahic/hello-world-app-with-node-js-and-express-c1eb7cfa8a30";
-//     const qrCodeImage = await QRCode.toDataURL(url);
-//     res.send(`<img src="${qrCodeImage}" alt="QR Code"/>`);
-//   } catch (err) {
-//     console.error("Error generating QR code:", err);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to the Event Management API" });
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

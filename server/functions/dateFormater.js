@@ -1,0 +1,21 @@
+function formatMonthDateYear(date) {
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const day = date.getDate();
+  const year = date.getFullYear();
+  return `${month[date.getMonth()]} ${day}, ${year}`;
+}
+
+module.exports = formatMonthDateYear;

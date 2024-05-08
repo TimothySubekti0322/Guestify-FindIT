@@ -5,9 +5,12 @@ import * as Clipboard from "expo-clipboard";
 
 const QrCodeLinkButton = ({ link }) => {
   const copyToClipboard = async () => {
-    console.log("copied to clipboard");
-    ToastAndroid.show("Copied to clipboard", ToastAndroid.SHORT);
-    await Clipboard.setStringAsync(link);
+    if (link !== "") {
+      ToastAndroid.show("Copied to clipboard", ToastAndroid.SHORT);
+      await Clipboard.setStringAsync(link);
+    } else {
+      ToastAndroid.show("Link is empty", ToastAndroid.SHORT);
+    }
   };
   return (
     <View className="bg-[#E9A400] rounded-xl w-28 overflow-hidden">

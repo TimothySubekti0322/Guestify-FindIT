@@ -1,6 +1,6 @@
 import { CameraView, useCameraPermissions } from "expo-camera/next";
 import React, { useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Dimensions, Image, Pressable, Text, View } from "react-native";
 import WhiteFrame from "./whiteFrame";
 import Button from "../button/button";
 
@@ -11,7 +11,10 @@ const CameraModule = ({
   width,
   cameraLoading,
   setCameraLoading,
+  loading,
 }) => {
+  const height = Dimensions.get("window").height;
+  console.log("height = ", height);
   const [permission, requestPermission] = useCameraPermissions();
   if (!permission) {
     // Camera permissions are still loading
@@ -21,7 +24,10 @@ const CameraModule = ({
   if (!permission.granted) {
     // Camera permissions are not granted yet
     return (
-      <View className="items-center justify-center" style={{ flex: 1 }}>
+      <View
+        className="items-center justify-center"
+        style={{ height: height - 160 }}
+      >
         <Text className="">We need your permission to show the camera</Text>
         <Button handlePress={requestPermission} title="grant permission" />
       </View>
@@ -40,7 +46,7 @@ const CameraModule = ({
         barcodeScannerSettings={{
           barcodeTypes: ["qr"],
         }}
-        onBarcodeScanned={(data) => handleScanned(data.data)}
+        onBarcodeScanned={loading ? null : (data) => handleScanned(data.data)}
         enableTorch={flash}
         onCameraReady={() => setCameraLoading(false)}
       >

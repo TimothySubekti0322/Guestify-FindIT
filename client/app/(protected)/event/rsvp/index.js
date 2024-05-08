@@ -8,6 +8,11 @@ import KonfirmasiKehadiranOption from "../../../../components/rsvp/konfirmasiKeh
 import KonfirmasiRSVPButton from "../../../../components/rsvp/konfirmasiRSVPButton";
 import EventDetail from "../../../../components/rsvp/eventDetail";
 import DaftarAcaraCard from "../../../../components/rsvp/daftarAcaraCard";
+import { formatMonthDateYear } from "../../../../utils/dateFormater";
+import BASE_URL from "../../../../static/API";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StatusBar } from "expo-status-bar";
 
 const initialFormData = {
   nama: "",
@@ -18,23 +23,45 @@ const initialFormData = {
 };
 
 const Rsvp = () => {
-  const { invitationCode } = useLocalSearchParams();
-  console.log(invitationCode);
+  // const { invitationCode } = useLocalSearchParams();
+  const searchParams = useLocalSearchParams();
+
+  console.log("searchParams: ", searchParams);
   const [formData, setFormData] = useState(initialFormData);
 
   const handleChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleSubmit = () => {
-    setFormData((prev) => ({ ...prev, totalTamu: parseInt(prev.totalTamu) }));
-    router.replace("./successPage");
-    console.log(formData);
+  const handleSubmit = async () => {
+    try {
+      const submitData = {
+        eventId: searchParams?.eventId,
+        eventName: searchParams?.eventName,
+        date: searchParams?.date,
+        eventCode: searchParams?.eventCode,
+        rsvpStatus: formData.kehadiran ? "confirmed" : "declined",
+        totalGuest: formData.totalTamu,
+      };
+      console.log(submitData);
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.post(`${BASE_URL}/rsvp`, submitData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data);
+      if (response.data.message == "success") {
+        router.replace("./successPage");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-
+      <StatusBar style="dark" />
       <SafeAreaView style={{ flex: 1 }} edges={["top"]}>
         <ScrollView
           className="bg-[#f7f7f7] px-8 "
@@ -56,30 +83,13 @@ const Rsvp = () => {
             </Text>
           </View>
           <EventDetail
-            title="Acara Pernikahan"
-            name="Michael & Fenny"
-            location="Jakarta, Indonesia"
-            date="February 11, 2023"
-          />
-
-          <Text
-            className="text-lg text-[#31013F] mt-8"
-            style={{ fontFamily: "Inter-SemiBold" }}
-          >
-            Daftar Acara
-          </Text>
-          {/* Daftar Acara Card */}
-          <DaftarAcaraCard
-            title="Pemberkatan Nikah"
-            location="Gereja Katedral Jakarta"
-            time="09:00 - 12:00"
-            fileName="pemberkatan-nikah"
-          />
-          <DaftarAcaraCard
-            title="Resepsi Pernikahan"
-            location="Farimont Hotel, Jakarta"
-            time="18:00 - 22:00"
-            fileName="resepsi-pernikahan"
+            title={searchParams?.eventName || "Acara Pernikahan"}
+            name={searchParams?.owner || "Michael & Fenny"}
+            location={searchParams?.location || "Jakarta, Indonesia"}
+            date={
+              formatMonthDateYear(new Date(searchParams?.date)) ||
+              "February 11, 2024"
+            }
           />
 
           {/* Isi Data Diri */}

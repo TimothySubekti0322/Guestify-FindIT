@@ -14,6 +14,10 @@ import {
 import LoadingModal from "../../../components/scanner/loadingModal";
 import QrErrorModal from "../../../components/scanner/qrErrorModal";
 import SubmitErrorModal from "../../../components/scanner/submitErrorModal";
+import { StatusBar } from "expo-status-bar";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import BASE_URL from "../../../static/API";
 
 const Scanner = () => {
   const [screen, setScreen] = useState("scan");
@@ -57,12 +61,44 @@ const Scanner = () => {
     try {
       // Fetch Data here
       console.log(data);
-      setTimeout(() => {
-        hideModal();
+      // Check if the data was a right API
+      if (!data.includes(`${BASE_URL}/checkIn/checkRSVP`)) {
         setLoading(false);
-        router.push("./scanner/guestConfirmation");
-      }, 2000);
+        setQrError(true);
+        return;
+      }
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get(data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data);
+      if (response.data.message == "success") {
+        setTimeout(() => {
+          hideModal();
+        }, 10);
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
+        setTimeout(() => {
+          router.push({
+            pathname: "./scanner/guestConfirmation",
+            params: {
+              eventId: response.data.data.eventId,
+              email: response.data.data.email,
+              eventName: response.data.data.eventName,
+              name: response.data.data.name,
+            },
+          });
+        }, 600);
+      }
+      if (response.data.message == "Event Code not found") {
+        setLoading(false);
+        setQrError(true);
+      }
     } catch (error) {
+      setLoading(false);
       setQrError(true);
       console.log(error);
     }
@@ -77,7 +113,15 @@ const Scanner = () => {
       setTimeout(() => {
         setLoading(false);
         hideModal();
-        router.push("./scanner/guestConfirmation");
+        router.push({
+          pathname: "./scanner/guestConfirmation",
+          params: {
+            eventId: formData.eventId,
+            email: formData.email,
+            eventName: response.data.data.eventName,
+            name: response.data.data.name,
+          },
+        });
       }, 2000);
     } catch (error) {
       setSubmitError(true);
@@ -94,6 +138,7 @@ const Scanner = () => {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
+      <StatusBar style="light" />
       <PaperProvider>
         <Portal>
           <Modal
@@ -141,6 +186,7 @@ const Scanner = () => {
                 width={width}
                 cameraLoading={cameraLoading}
                 setCameraLoading={setCameraLoading}
+                loading={loading}
               />
               {cameraLoading ? (
                 <View

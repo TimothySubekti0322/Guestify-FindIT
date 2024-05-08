@@ -1,8 +1,18 @@
 import { View, Text, ImageBackground, Pressable } from "react-native";
 import { Icon } from "react-native-paper";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Header = () => {
+  const [name, setName] = useState("");
+  useEffect(() => {
+    const fetchName = async () => {
+      const userData = await AsyncStorage.getItem("userData");
+      const name = JSON.parse(userData).name;
+      setName(name);
+    };
+    fetchName();
+  });
   return (
     <ImageBackground
       source={require("../../assets/home/header-background.png")}
@@ -31,7 +41,7 @@ const Header = () => {
           className="text-3xl text-white"
           style={{ fontFamily: "Inter-SemiBold" }}
         >
-          Bobby!
+          {name}
         </Text>
       </View>
     </ImageBackground>

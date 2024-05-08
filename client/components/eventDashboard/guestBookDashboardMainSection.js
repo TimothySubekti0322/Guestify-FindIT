@@ -3,8 +3,15 @@ import React from "react";
 import EventDashboardImage from "../../static/image/eventDashboard";
 import EventDashboardCard from "./eventDashboardCard";
 import SubMenu from "./subMenu";
+import { getPercentage } from "../../utils/numberFormater";
 
 const GuestBookDashboardMainSection = ({ subMenu, setSubMenu, data }) => {
+  const checkedInPax = data.totalCheckedInPax + " pax";
+  const angpaoPercentage = getPercentage(data.totalAngpao, data.totalCheckedIn);
+  const souvenirPercentage = getPercentage(
+    data.totalSouvenir,
+    data.totalCheckedIn
+  );
   return (
     <View className="relative bg-[#F7F7F7] px-8 pt-10" style={{ flex: 1 }}>
       {/* SubMenu */}
@@ -21,7 +28,7 @@ const GuestBookDashboardMainSection = ({ subMenu, setSubMenu, data }) => {
             className="p-0 mt-3 text-4xl"
             style={{ fontFamily: "Inter-SemiBold" }}
           >
-            {data.totalConfirmedInvitation}
+            {data.totalConfirmed}
           </Text>
           <Text className="pb-1" style={{ fontFamily: "Inter-Medium" }}>
             undangan
@@ -34,9 +41,9 @@ const GuestBookDashboardMainSection = ({ subMenu, setSubMenu, data }) => {
           image={EventDashboardImage.qrCode}
           title="Checked In"
           numberColor="#690895"
-          registered={data.checkedIn}
-          total={data.totalConfirmedInvitation}
-          detail="192 pax"
+          registered={data.totalCheckedIn}
+          total={data.totalConfirmed}
+          detail={checkedInPax}
         />
         <EventDashboardCard
           cardBackground="#FFF7EF"
@@ -44,9 +51,9 @@ const GuestBookDashboardMainSection = ({ subMenu, setSubMenu, data }) => {
           image={EventDashboardImage.money}
           title="Angpao"
           numberColor="#E9A400"
-          registered={data.angpao}
-          total={data.checkedIn}
-          detail="67.00 %"
+          registered={data.totalAngpao}
+          total={data.totalCheckedIn}
+          detail={angpaoPercentage}
         />
         <EventDashboardCard
           cardBackground="#FFF7EF"
@@ -54,9 +61,9 @@ const GuestBookDashboardMainSection = ({ subMenu, setSubMenu, data }) => {
           image={EventDashboardImage.gift}
           title="Souvenir"
           numberColor="#E9A400"
-          registered={data.souvenir}
-          total={data.checkedIn}
-          detail="17.00 %"
+          registered={data.totalSouvenir}
+          total={data.totalCheckedIn}
+          detail={souvenirPercentage}
         />
         <View className="w-full rounded-full bg-[#E9A400] overflow-hidden mt-6">
           <Pressable

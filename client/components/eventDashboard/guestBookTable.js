@@ -19,15 +19,15 @@ const GuestBookTable = ({ data }) => {
           >
             <Text className="text-white">Guest Name</Text>
           </Pressable>
-          <Text className="text-white w-36">Phone Number</Text>
+          <Text className="w-56 text-white">Email</Text>
           <Text className="text-center text-white w-28">Check-in</Text>
-          <Text className="text-center text-white w-28">Gift</Text>
+          <Text className="text-center text-white w-28">Angpao</Text>
           <Text className="text-center text-white w-28">Souvenir</Text>
           <Text className="text-center text-white w-36">Total Guest</Text>
         </View>
 
         {/* Table Row */}
-        {data.map((item, index) => (
+        {data?.map((item, index) => (
           <View
             key={item.no}
             className={`${
@@ -35,13 +35,13 @@ const GuestBookTable = ({ data }) => {
             } flex-row items-center h-10 `}
           >
             <Text className="w-24 pl-4 text-[#31013F]">{item.no}</Text>
-            <Text className="text-[#31013F] w-44">{item.guestName}</Text>
-            <Text className="black w-36">{item.phoneNumber}</Text>
+            <Text className="text-[#31013F] w-44">{item.name}</Text>
+            <Text className="w-56 black">{item.email}</Text>
             <View className="w-28 items-center text-[#31013F]">
-              <GuestTableChip value={item.checkIn} />
+              <GuestTableChip value={item.checkedIn} />
             </View>
             <View className="w-28 items-center text-[#31013F]">
-              <GuestTableChip value={item.gift} />
+              <GuestTableChip value={item.angpao} />
             </View>
             <View className="w-28 items-center text-[#31013F]">
               <GuestTableChip value={item.souvenir} />

@@ -1,12 +1,33 @@
 import { View, Text, ScrollView, Image, Pressable } from "react-native";
-import React from "react";
-import { Icon } from "react-native-paper";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Icon } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import EventItems from "../../../../components/qrList/eventItems";
 import { Stack, router } from "expo-router";
 import Header from "../../../../components/header/header";
+import axios from "axios";
+import BASE_URL from "../../../../static/API";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import NoDataComponent from "../../../../components/noData/noDataComponent";
+import { formatDateMonthYear } from "../../../../utils/dateFormater";
 
 const index = () => {
+  const [loading, setLoading] = useState(true);
+  const [qrCodeList, setQrCodeList] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log("fetching data");
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get(`${BASE_URL}/qrCode`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setQrCodeList(response.data.qrCodes);
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -19,7 +40,29 @@ const index = () => {
           showsVerticalScrollIndicator={false}
         >
           {/* Content */}
-          <EventItems
+          {loading && (
+            <View className="items-center justify-center" style={{ flex: 1 }}>
+              <ActivityIndicator
+                animating={true}
+                color="#BB7EB1"
+                size="large"
+              />
+              <Text className="text-[#6D6D6D] mt-4">Loading...</Text>
+            </View>
+          )}
+          {!loading && qrCodeList.length === 0 && <NoDataComponent />}
+          {qrCodeList?.map((qrCode) => (
+            <EventItems
+              key={qrCode.id}
+              title={qrCode.eventName}
+              date={formatDateMonthYear(new Date(qrCode.date))}
+              id={qrCode.eventCode}
+              type="marriage"
+              backgroundColor="#F5EDFF"
+              qrCodeUrl={qrCode.qrCodeUrl}
+            />
+          ))}
+          {/* <EventItems
             title="Acara A"
             date="25 April 2024"
             id="A100"
@@ -74,7 +117,7 @@ const index = () => {
             id="A103"
             type="lunch"
             backgroundColor="#FFF4DE"
-          />
+          /> */}
         </ScrollView>
       </SafeAreaView>
     </>
