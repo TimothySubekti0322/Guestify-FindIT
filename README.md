@@ -22,8 +22,11 @@ Guestify - "**transforms event planning from inception to memory, offering a sus
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-  - [Running the App](#running-the-app)
 - [API Documentation](#api)
+- [Deployment](#deployment)
+- [Contributors](#contributors)
+- [Feedback](#feedback)
+- 
 ## Overview
 **Guestify - A Sustainable and Intelligent Guest Management Solution**
 
