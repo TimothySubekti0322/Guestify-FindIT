@@ -2,9 +2,6 @@
 
 Guestify - "**transforms event planning from inception to memory, offering a sustainable technology solution for modern Indonesia**. By integrating digital RSVP and guest management with QR code technology, Guestify ensures efficient event execution, reduces environmental impact by minimizing paper use, and enhances guest experience through seamless digital interactions. Aimed at propelling Indonesia towards its Golden Vision 2045, Guestify stands as the optimal solution for event organizers seeking to embrace innovation and sustainability"
 
-
-
-
 ## Guestify Team
 
 <p align="center" style="margin: 60px 0px">
@@ -22,11 +19,11 @@ Guestify - "**transforms event planning from inception to memory, offering a sus
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-- [API Documentation](#api)
+- [API Documentation](#api-documentation)
 - [Deployment](#deployment)
 - [Contributors](#contributors)
 - [Feedback](#feedback)
-- 
+  
 ## Overview
 **Guestify - A Sustainable and Intelligent Guest Management Solution**
 
@@ -50,8 +47,6 @@ Guestify is a digital guest management application that streamlines event planni
 ### Database
 - **Cloud Database :** Firestore
 - **Cloud Storage :** Firebase
-
-
 
 ## Getting Started
 
@@ -228,7 +223,8 @@ The Guestify team is composed of talented individuals who bring diverse skills a
 
 - **[Michael Sihotang](https://www.linkedin.com/in/michael-sihotang-9650bb215/)** As Hustler (Business Development Lead)
 - **[Timothy Subekti](https://github.com/TimothySubekti0322)** As Hacker (Technical Lead)
-- **[Felisa Aidadora Dermawan](https://www.linkedin.com/in/felisadarmawan/)** As Hipster (Design Lead)
+- **[Felisa Aidadora Darmawan](https://www.linkedin.com/in/felisadarmawan/)** As Hipster (Design Lead)
+- 
 ## Feedback
 
 Your feedback is crucial for us to continue improving Guestify and providing the best possible experience. Whether it's a feature request, bug report, or general comments, we value your input.
