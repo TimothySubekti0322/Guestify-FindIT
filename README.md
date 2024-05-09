@@ -9,7 +9,7 @@ Guestify - "**transforms event planning from inception to memory, offering a sus
 
 Meet our great team
 
-<p align="center" style="margin: 40px 0px">
+<p align="justify" style="margin: 40px 0px">
   <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715251000/Group_376_rgkkxu.png" alt="Michael Sihotang" width="25%">
   <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715251001/Group_377_iekbrd.png" alt="Timothy Subekti" width="25%" style="margin: 0 100px;">
   <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715251403/Group_378_1_p0o6ee.png" alt="Felisa Aidadora D" width="25%">
