@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const router = express.Router();
 const firebase = require("firebase-admin");
@@ -19,8 +21,8 @@ const formatMonthDateYear = require("../functions/dateFormater");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "guestifyevent@gmail.com",
-    pass: "npah eysc zyrq kyla",
+    user: process.env.EMAIL,
+    pass: process.env.APP_PASSWORD,
   },
 });
 
@@ -120,10 +122,8 @@ router.post("/add", verifyToken, upload.single("file"), async (req, res) => {
           eventDate: eventDate,
         });
 
-        console.log("HTML: ", html);
-
         const mailOptions = {
-          from: "guestifyevent@gmail.com",
+          from: process.env.EMAIL,
           to: file[i][2],
           subject: "Guestify",
           html: html,
