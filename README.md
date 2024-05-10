@@ -5,11 +5,11 @@ Guestify - "**transforms event planning from inception to memory, offering a sus
 ## Guestify Team
 
 <p align="center" style="margin: 60px 0px">
-  <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715343749/Group_373_posotu.png" alt="Michael Sihotang" width="25%">
+  <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715343955/Group_376_esfrcx.png" alt="Michael Sihotang" width="25%">
   <img src="https://via.placeholder.com/100x1/0000/0000.png" alt="spacer" style="width: 5%;">
-  <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715343749/Group_374_zq8lyz.png" alt="Timothy Subekti" width="25%">
+  <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715343955/Group_377_qrizgb.png" alt="Timothy Subekti" width="25%">
     <img src="https://via.placeholder.com/100x1/0000/0000.png" alt="spacer" style="width: 5%;">
-  <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715343749/Group_375_hqsa8d.png" alt="Felisa Aidadora D" width="25%">
+  <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715343955/Group_378_vlfrt6.png" alt="Felisa Aidadora D" width="25%">
 </p>
 
 ## Table of Contents
