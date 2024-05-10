@@ -33,8 +33,6 @@ const GuestConfirmation = () => {
         angpao: kado,
       };
 
-      console.log(formData);
-
       const token = await AsyncStorage.getItem("token");
       const response = await axios.post(`${BASE_URL}/checkIn`, formData, {
         headers: {
@@ -46,8 +44,7 @@ const GuestConfirmation = () => {
         router.push("./successPage");
       }
     } catch (error) {
-      console.log(error);
-      Alert.alert("Error", "Terjadi kesalahan, silahkan coba lagi");
+      Alert.alert("Error", error.message, [{ text: "OK" }]);
     }
   };
   return (

@@ -1,7 +1,14 @@
 import { Text, TextInput } from "react-native";
 import React from "react";
 
-const TextInputRsvp = ({ title, placeholder, name, handleChange, type }) => {
+const InputField = ({
+  title,
+  placeholder,
+  name,
+  handleChange,
+  type,
+  submitError,
+}) => {
   return (
     <>
       <Text className="text-[#690895]" style={{ fontFamily: "Manrope-Bold" }}>
@@ -10,11 +17,14 @@ const TextInputRsvp = ({ title, placeholder, name, handleChange, type }) => {
       <TextInput
         placeholder={placeholder}
         keyboardType={type == "number" ? "numeric" : "default"}
-        className="bg-[#F1F1F1] p-3 rounded-xl mt-2 mb-4"
+        className={`${
+          submitError && "border-[1px] border-red-500"
+        } bg-[#F1F1F1] p-3 rounded-xl mt-2 mb-6`}
         onChangeText={(text) => handleChange(name, text)}
       />
+      {submitError && <Text className="mt-1 text-red-500">{submitError}</Text>}
     </>
   );
 };
 
-export default TextInputRsvp;
+export default InputField;

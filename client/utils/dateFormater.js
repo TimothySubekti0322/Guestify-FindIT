@@ -1,4 +1,4 @@
-export const formatDayDateMonthYear = (date) => {
+const formatDayDateMonthYear = (date) => {
   const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const months = [
     "Januari",
@@ -23,7 +23,7 @@ export const formatDayDateMonthYear = (date) => {
   return `${dayName}, ${dateNumber} ${monthName} ${year}`;
 };
 
-export const formatDateMonthYear = (date) => {
+const formatDateMonthYear = (date) => {
   const months = [
     "Januari",
     "Februari",
@@ -46,7 +46,7 @@ export const formatDateMonthYear = (date) => {
   return `${dateNumber} ${monthName} ${year}`;
 };
 
-export const formatMonthDateYear = (date) => {
+const formatMonthDateYear = (date) => {
   const months = [
     "Januari",
     "Februari",
@@ -68,3 +68,5 @@ export const formatMonthDateYear = (date) => {
 
   return `${monthName} ${dateNumber}, ${year}`;
 };
+
+export { formatDayDateMonthYear, formatDateMonthYear, formatMonthDateYear };

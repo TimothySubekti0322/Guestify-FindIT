@@ -1,13 +1,12 @@
-import { View, Text, Pressable, ScrollView } from "react-native";
+import { View, Text, Pressable, ScrollView, Alert } from "react-native";
 import React, { useState } from "react";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Icon } from "react-native-paper";
-import TextInputRSVP from "../../../../components/rsvp/textInput";
+import TextInputRsvp from "../../../../components/rsvp/textInput";
 import KonfirmasiKehadiranOption from "../../../../components/rsvp/konfirmasiKehadiranOption";
-import KonfirmasiRSVPButton from "../../../../components/rsvp/konfirmasiRSVPButton";
+import KonfirmasiRsvpButton from "../../../../components/rsvp/konfirmasiRSVPButton";
 import EventDetail from "../../../../components/rsvp/eventDetail";
-import DaftarAcaraCard from "../../../../components/rsvp/daftarAcaraCard";
 import { formatMonthDateYear } from "../../../../utils/dateFormater";
 import BASE_URL from "../../../../static/API";
 import axios from "axios";
@@ -22,11 +21,9 @@ const initialFormData = {
   harapan: "",
 };
 
-const Rsvp = () => {
-  // const { invitationCode } = useLocalSearchParams();
+const index = () => {
   const searchParams = useLocalSearchParams();
 
-  console.log("searchParams: ", searchParams);
   const [formData, setFormData] = useState(initialFormData);
 
   const handleChange = (key, value) => {
@@ -43,19 +40,17 @@ const Rsvp = () => {
         rsvpStatus: formData.kehadiran ? "confirmed" : "declined",
         totalGuest: formData.totalTamu,
       };
-      console.log(submitData);
       const token = await AsyncStorage.getItem("token");
       const response = await axios.post(`${BASE_URL}/rsvp`, submitData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data);
       if (response.data.message == "success") {
         router.replace("./successPage");
       }
     } catch (error) {
-      console.log(error);
+      Alert.alert("Error", error.message, [{ text: "OK" }]);
     }
   };
   return (
@@ -101,7 +96,7 @@ const Rsvp = () => {
           </Text>
 
           {/* Nama Lengkap */}
-          <TextInputRSVP
+          <TextInputRsvp
             title="Nama Lengkap"
             placeholder="Masukan Nama Lengkap Kamu"
             name="nama"
@@ -110,7 +105,7 @@ const Rsvp = () => {
           />
 
           {/* Nama Telepon */}
-          <TextInputRSVP
+          <TextInputRsvp
             title="Nomor Telepon"
             placeholder="Masukan Nomor Telepon Kamu"
             name="telepon"
@@ -126,7 +121,7 @@ const Rsvp = () => {
           />
 
           {/* Total Tamu */}
-          <TextInputRSVP
+          <TextInputRsvp
             title="Total Tamu"
             placeholder="Masukan Total Tamu"
             name="totalTamu"
@@ -135,7 +130,7 @@ const Rsvp = () => {
           />
 
           {/* Harapan Kamu */}
-          <TextInputRSVP
+          <TextInputRsvp
             title="Harapan Kamu"
             placeholder="Masukan Harapan Kamu"
             name="harapan"
@@ -144,11 +139,11 @@ const Rsvp = () => {
           />
 
           {/* Button RSVP */}
-          <KonfirmasiRSVPButton handleSubmit={handleSubmit} />
+          <KonfirmasiRsvpButton handleSubmit={handleSubmit} />
         </ScrollView>
       </SafeAreaView>
     </>
   );
 };
 
-export default Rsvp;
+export default index;

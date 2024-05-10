@@ -17,6 +17,12 @@ const DatePicker = ({ title, handleChange }) => {
   const [selectedDate, setSelectedDate] = useState(0);
 
   const handleChooseDate = (dateNumber) => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const chooseDate = new Date(year, dateFn.getMonthNumber(month), dateNumber);
+    if (chooseDate < today) {
+      return;
+    }
     handleChange(
       "date",
       new Date(year, dateFn.getMonthNumber(month), dateNumber)

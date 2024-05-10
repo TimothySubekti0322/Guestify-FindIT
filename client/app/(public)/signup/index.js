@@ -91,7 +91,6 @@ const Signup = () => {
   // Handle form submit
   const handleSubmit = async () => {
     Keyboard.dismiss();
-    console.log("form: ", form);
 
     // Axios request
     if (isDataValid()) {

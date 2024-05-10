@@ -55,12 +55,12 @@ const Scanner = () => {
   const width = Dimensions.get("window").width;
   const padding = width * 0.09;
 
+  // Handle Barcode Scan
   const handleScanned = async (data) => {
     setLoading(true);
     showModal();
     try {
-      // Fetch Data here
-      console.log(data);
+
       // Check if the data was a right API
       if (!data.includes(`${BASE_URL}/checkIn/checkRSVP`)) {
         setLoading(false);
@@ -73,7 +73,6 @@ const Scanner = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data);
       if (response.data.message == "success") {
         setTimeout(() => {
           hideModal();
@@ -93,39 +92,56 @@ const Scanner = () => {
           });
         }, 600);
       }
-      if (response.data.message == "Event Code not found") {
+      if (response.data.status !== 200) {
         setLoading(false);
         setQrError(true);
       }
     } catch (error) {
       setLoading(false);
       setQrError(true);
-      console.log(error);
     }
   };
 
+  // Handle Event Code submit
   const handleSubmit = async () => {
     setLoading(true);
     showModal();
     try {
-      // Fetch Data here
-      console.log(formData);
-      setTimeout(() => {
-        setLoading(false);
-        hideModal();
-        router.push({
-          pathname: "./scanner/guestConfirmation",
-          params: {
-            eventId: formData.eventId,
-            email: formData.email,
-            eventName: response.data.data.eventName,
-            name: response.data.data.name,
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.get(
+        `${BASE_URL}/checkIn/checkRSVP/${formData.kodeUndangan}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        });
-      }, 2000);
+        }
+      );
+      if (response.data.message == "success") {
+        setTimeout(() => {
+          hideModal();
+        }, 10);
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
+        setTimeout(() => {
+          router.push({
+            pathname: "./scanner/guestConfirmation",
+            params: {
+              eventId: response.data.data.eventId,
+              email: response.data.data.email,
+              eventName: response.data.data.eventName,
+              name: response.data.data.name,
+            },
+          });
+        }, 600);
+      }
+      if (response.data.status !== 200) {
+        setLoading(false);
+        setSubmitError(response.data.message);
+      }
     } catch (error) {
+      setLoading(false);
       setSubmitError(true);
-      console.log(error);
     }
   };
 

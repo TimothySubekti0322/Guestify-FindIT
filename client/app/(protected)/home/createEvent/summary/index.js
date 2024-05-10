@@ -38,7 +38,6 @@ const Summary = () => {
   const paymentMethod = createEventCtx.paymentMethod;
 
   const handleSubmit = async () => {
-    console.log("Submit");
     setLoading(true);
     const token = await AsyncStorage.getItem("token");
 
@@ -63,7 +62,6 @@ const Summary = () => {
         showModal();
       }
     } catch (error) {
-      console.log(error);
       Alert.alert("Error", error.message, [
         {
           text: "OK",

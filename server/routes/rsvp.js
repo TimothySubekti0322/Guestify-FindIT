@@ -22,6 +22,22 @@ router.get("/checkInvitationCode/:eventCode", verifyToken, async (req, res) => {
         .json({ message: "Event Code not found", status: "404" });
     }
 
+    // Check authorization
+    if (req.email !== result.data().email) {
+      return res.status(200).json({
+        message: "Unauthorized",
+        status: "401",
+      });
+    }
+
+    // Check if the invitation Code is already used
+    if (result.data().rsvpStatus !== "waiting") {
+      return res.status(200).json({
+        message: "Event Code already used",
+        status: "400",
+      });
+    }
+
     const event = await db
       .collection("events")
       .doc(result.data().eventId)
@@ -82,8 +98,6 @@ router.post("/", verifyToken, async (req, res) => {
         destination: fileName,
       });
 
-      console.log(`qrcode.png uploaded to ${file.baseUrl}.`);
-
       // options for the getSignedUrl() function
       const options = {
         action: "read",
@@ -98,10 +112,8 @@ router.post("/", verifyToken, async (req, res) => {
       // Delete file
       fs.unlink(fileName, (err) => {
         if (err) {
-          console.error("Error Delete: ", err);
           return;
         }
-        console.log("File Deleted");
       });
 
       // Update Rsvp Pax
@@ -144,8 +156,7 @@ router.post("/", verifyToken, async (req, res) => {
       status: "200",
     });
   } catch (err) {
-    console.error("Error Upload: ", err);
-    res.status(500).send("Internal Server Error");
+    return res.status(500).send("Internal Server Error");
   }
 });
 

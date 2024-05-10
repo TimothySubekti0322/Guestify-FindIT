@@ -1,9 +1,7 @@
 import { View, Text, Image, Pressable } from "react-native";
-import React, { useContext } from "react";
+import React from "react";
 import StatusChip from "./statusChip";
 import { formatDateMonthYear } from "../../utils/dateFormater";
-import { router } from "expo-router";
-import { DashboardContext } from "../../store/context/dashboardContext";
 
 const EventCard = ({
   image,
@@ -23,16 +21,6 @@ const EventCard = ({
       : eventDate.getDate() < now.getDate()
       ? "Sudah Berlangsung"
       : "Sedang Berlangsung";
-
-  const dashboardCtx = useContext(DashboardContext);
-  // const handlePress = () => {
-  //   console.log(data);
-  //   dashboardCtx.setData(data);
-  //   router.push({
-  //     pathname: "./layout",
-  //     params: { screen: "eventDashboard", idEvent: idEvent },
-  //   });
-  // };
 
   return (
     <Pressable

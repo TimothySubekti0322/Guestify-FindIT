@@ -23,6 +23,7 @@ const Event = ({ setPage }) => {
     if (invitationCode !== "") {
       try {
         const token = await AsyncStorage.getItem("token");
+
         const response = await axios.get(
           `${BASE_URL}/rsvp/checkInvitationCode/${invitationCode}`,
           {
@@ -31,9 +32,14 @@ const Event = ({ setPage }) => {
             },
           }
         );
-        console.log(response.data);
-        if (response.data.message == "Event Code not found") {
+
+        if (
+          response.data.message == "Event Code not found" ||
+          response.data.message == "Unauthorized"
+        ) {
           setInvitationCodeError("Code is Invalid");
+        } else if (response.data.message == "Event Code already used") {
+          setInvitationCodeError("Code already used");
         } else if (response.data.message == "success") {
           setInvitationCodeError("");
           const paramsData = {
@@ -41,16 +47,12 @@ const Event = ({ setPage }) => {
             ...response.data.data,
           };
           router.push({
-            pathname: "../event/rsvp",
+            pathname: "./event/rsvp",
             params: paramsData,
           });
         }
       } catch (error) {
-        Alert.alert("Error", error.message, [
-          {
-            text: "OK",
-          },
-        ]);
+        Alert.alert("Error", error.message, [{ text: "OK" }]);
       }
     }
   };

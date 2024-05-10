@@ -1,7 +1,7 @@
 import { View, Pressable, Text } from "react-native";
 import React from "react";
 
-const KonfirmasiRSVPButton = ({ handleSubmit }) => {
+const KonfirmasiRsvpButton = ({ handleSubmit }) => {
   return (
     <View
       className="bg-[#E9A400] rounded-full w-full my-8 overflow-hidden"
@@ -23,4 +23,4 @@ const KonfirmasiRSVPButton = ({ handleSubmit }) => {
   );
 };
 
-export default KonfirmasiRSVPButton;
+export default KonfirmasiRsvpButton;

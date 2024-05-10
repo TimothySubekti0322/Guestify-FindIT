@@ -28,7 +28,6 @@ const dummyData = {
 };
 
 const EventDashboard = ({ idEvent }) => {
-  console.log(idEvent);
 
   const dashboardCtx = useContext(DashboardContext);
 
@@ -40,6 +39,8 @@ const EventDashboard = ({ idEvent }) => {
   const hideModal = () => setVisible(false);
 
   const [uploadStatus, setUploadStatus] = useState("loading");
+
+  const [fileName, setFileName] = useState("");
 
   const [data, setData] = useState([]);
 
@@ -76,7 +77,7 @@ const EventDashboard = ({ idEvent }) => {
             )}
             {uploadStatus === "failed" && (
               <FailedUploadFileModal
-                fileName={"rsvp-error-list.txt"}
+                fileName={fileName}
                 hideModal={hideModal}
               />
             )}
@@ -119,6 +120,7 @@ const EventDashboard = ({ idEvent }) => {
             showModal={showModal}
             hideModal={hideModal}
             setUploadStatus={setUploadStatus}
+            setFileName={setFileName}
           />
         )}
       </PaperProvider>

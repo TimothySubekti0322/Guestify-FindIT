@@ -27,7 +27,6 @@ const CreateEvent = () => {
   };
 
   const handleNext = () => {
-    console.log(form);
     createEventCtx.setType(form.type);
     createEventCtx.setOwner(form.owner);
     createEventCtx.setName(form.eventName);

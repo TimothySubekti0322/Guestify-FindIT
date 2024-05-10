@@ -22,7 +22,9 @@ async function saveFile(uri, filename, mimetype) {
           });
           ToastAndroid.show("File saved successfully ✅", ToastAndroid.SHORT);
         })
-        .catch((e) => console.log(e));
+        .catch((e) =>
+          ToastAndroid.show("Failed to save file ❌", ToastAndroid.SHORT)
+        );
     } else {
       shareAsync(uri);
     }

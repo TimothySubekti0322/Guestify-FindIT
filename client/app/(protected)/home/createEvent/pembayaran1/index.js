@@ -15,7 +15,6 @@ const Pembayaran1 = () => {
   const [metodePembayaran, setMetodePembayaran] = useState("");
 
   const handleNext = () => {
-    console.log(metodePembayaran);
     createEventCtx.setPaymentMethod(metodePembayaran);
     router.push("/home/createEvent/pembayaran2");
   };

@@ -17,10 +17,7 @@ const handleUpload = async ({
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
 
-    console.log(response);
-
     if (!response.canceled) {
-      console.log("success");
       const { name, size, uri, mimeType } = response.assets[0];
       const fileToUpload = {
         name: name,
@@ -32,15 +29,11 @@ const handleUpload = async ({
       // Upload the Document
       const url = `${BASE_URL}/guest/add`;
       const formData = new FormData();
-      console.log(fileToUpload);
+
       formData.append("file", fileToUpload);
       formData.append("eventId", data.id);
 
-      console.log(data.id);
-
       const token = await AsyncStorage.getItem("token");
-
-      console.log("token = ", token);
 
       const upload = await axios.post(url, formData, {
         headers: {
@@ -60,7 +53,6 @@ const handleUpload = async ({
       }
     }
   } catch (error) {
-    console.log(error);
     setUploadStatus("failed");
   }
 };

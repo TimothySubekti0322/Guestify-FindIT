@@ -35,10 +35,7 @@ router.get("/", verifyToken, async (req, res) => {
             ...doc.data(),
           });
           number++;
-          console.log("guestData : ", {
-            email: doc.id,
-            ...doc.data(),
-          });
+
         });
       }
 
@@ -81,10 +78,6 @@ router.get("/:eventId", verifyToken, async (req, res) => {
           ...doc.data(),
         });
         number++;
-        console.log("guestData : ", {
-          email: doc.id,
-          ...doc.data(),
-        });
       });
     }
 

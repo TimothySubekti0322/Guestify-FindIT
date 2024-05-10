@@ -1,5 +1,5 @@
 import { CameraView, useCameraPermissions } from "expo-camera/next";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dimensions, Image, Pressable, Text, View } from "react-native";
 import WhiteFrame from "./whiteFrame";
 import Button from "../button/button";
@@ -14,11 +14,19 @@ const CameraModule = ({
   loading,
 }) => {
   const height = Dimensions.get("window").height;
-  console.log("height = ", height);
   const [permission, requestPermission] = useCameraPermissions();
+  const [hasRequestedPermission, setHasRequestedPermission] = useState(false);
+
+  useEffect(() => {
+    if (permission && !permission.granted && !hasRequestedPermission) {
+      requestPermission();
+      setHasRequestedPermission(true);
+    }
+  }, [permission, hasRequestedPermission]);
+
   if (!permission) {
     // Camera permissions are still loading
-    return <View />;
+    return <View style={{ height: height - 160 }} />;
   }
 
   if (!permission.granted) {

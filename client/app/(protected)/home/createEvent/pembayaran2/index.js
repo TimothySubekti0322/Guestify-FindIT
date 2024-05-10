@@ -25,7 +25,6 @@ const Pembayaran2 = () => {
   const price = formatCurrency(createEventCtx.price, "Rp", false, true);
 
   const copyToClipboard = async () => {
-    console.log("copied to clipboard")
     ToastAndroid.show("Copied to clipboard", ToastAndroid.SHORT);
     await Clipboard.setStringAsync("123 456 789 1011");
   };

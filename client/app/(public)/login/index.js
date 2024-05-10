@@ -65,7 +65,6 @@ const index = () => {
   // handle form submit
   const handleLogin = async () => {
     Keyboard.dismiss();
-    console.log("form: ", form);
 
     // Axios request
     if (isDataValid()) {

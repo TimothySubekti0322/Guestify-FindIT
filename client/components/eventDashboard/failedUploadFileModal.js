@@ -15,7 +15,7 @@ const FailedUploadFileModal = ({ fileName, hideModal }) => {
         className="mt-4 text-[#757D85]"
         style={{ fontFamily: "Manrope-Regular" }}
       >
-        Silakan baca file error yang baru saja diunduh dan perbaiki data Anda
+        Silakan perbaiki file yang baru saja diunggah dan perbaiki data Anda
         agar sesuai dengan format yang ditentukan. Kemudian upload kembali file
         spreadsheet yang telah Anda koreksi.
       </Text>

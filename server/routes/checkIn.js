@@ -18,7 +18,23 @@ router.get("/checkRSVP/:eventCode", verifyToken, async (req, res) => {
         .json({ message: "Event Code not found", status: "404" });
     }
 
-    console.log(result.data());
+    // Check if the scanner are the event owner
+    const ownerSnapshot = await db
+      .collection("users")
+      .where("event", "array-contains", result.data().eventId)
+      .get();
+
+    let owner = {};
+    ownerSnapshot.forEach((doc) => {
+      owner = doc.data().email;
+    });
+
+    if (owner !== req.email) {
+      return res.status(200).json({
+        message: "Code is Invalid",
+        status: "401",
+      });
+    }
 
     const guest = await db
       .collection("events")
@@ -26,8 +42,6 @@ router.get("/checkRSVP/:eventCode", verifyToken, async (req, res) => {
       .collection("listGuest")
       .doc(result.data().email)
       .get();
-
-    console.log(guest.data());
 
     // Check if guest is already checked in
     if (guest.data().checkedIn === true) {
@@ -50,11 +64,7 @@ router.get("/checkRSVP/:eventCode", verifyToken, async (req, res) => {
       .doc(result.data().eventId)
       .get();
 
-    console.log(event.data());
-
     const user = await db.collection("users").doc(result.data().email).get();
-
-    console.log(user.data());
 
     return res.status(200).json({
       message: "success",
@@ -92,8 +102,6 @@ router.post("/", verifyToken, async (req, res) => {
         parseInt(totalGuest)
       ),
     });
-
-    console.log("Error disini");
 
     // Update Guest
     await eventRef.collection("listGuest").doc(email).update({

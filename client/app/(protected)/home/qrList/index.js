@@ -16,7 +16,6 @@ const index = () => {
   const [qrCodeList, setQrCodeList] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      console.log("fetching data");
       const token = await AsyncStorage.getItem("token");
       const response = await axios.get(`${BASE_URL}/qrCode`, {
         headers: {

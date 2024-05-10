@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Pressable, Platform } from "react-native";
+import { View, Text, ScrollView, Pressable, Platform, ToastAndroid } from "react-native";
 import React, { useContext, useState } from "react";
 import SubMenu from "./subMenu";
 import InputTamuCard from "./inputTamuCard";
@@ -19,6 +19,7 @@ const InputTamuSection = ({
   showModal,
   hideModal,
   setUploadStatus,
+  setFileName,
 }) => {
   const dashboardCtx = useContext(DashboardContext);
   const [uploaded, setUploaded] = useState(data.listGuest.length > 0);
@@ -30,7 +31,6 @@ const InputTamuSection = ({
       guestBookTemplate,
       FileSystem.documentDirectory + filename
     );
-    console.log(result);
 
     saveFile(
       result.uri,
@@ -49,10 +49,8 @@ const InputTamuSection = ({
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
 
-      console.log(response);
-
       if (!response.canceled) {
-        console.log("success");
+
         const { name, size, uri, mimeType } = response.assets[0];
         const fileToUpload = {
           name: name,
@@ -61,18 +59,17 @@ const InputTamuSection = ({
           type: mimeType,
         };
 
+        // Set the file name
+        setFileName(name);
+
         // Upload the Document
         const url = `${BASE_URL}/guest/add`;
         const formData = new FormData();
-        console.log(fileToUpload);
+  
         formData.append("file", fileToUpload);
         formData.append("eventId", data.id);
 
-        console.log(data.id);
-
         const token = await AsyncStorage.getItem("token");
-
-        console.log("token = ", token);
 
         const upload = await axios.post(url, formData, {
           headers: {
@@ -92,17 +89,18 @@ const InputTamuSection = ({
           dashboardCtx.setData(updateData.data.data);
           setUploadStatus("success");
           setUploaded(true);
+        } else if (upload.data.message == "File template is wrong") {
+          setUploadStatus("failed");
         }
       }
     } catch (error) {
-      console.log(error);
       setUploadStatus("failed");
     }
   };
 
   // Handle Download Generated File
   const handleDownloadGeneratedFile = () => {
-    console.log("Download Generated File");
+    ToastAndroid.show("Download Generated File", ToastAndroid.SHORT);
   };
   return (
     <View className="relative bg-[#F7F7F7] px-8 pt-10" style={{ flex: 1 }}>

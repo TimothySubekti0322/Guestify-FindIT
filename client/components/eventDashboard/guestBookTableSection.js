@@ -27,7 +27,6 @@ const GuestBookTableSection = ({ subMenu, setSubMenu, data }) => {
   // Fetching Data
   useEffect(() => {
     const fetchData = async () => {
-      console.log(data.listGuest);
       // fetch data here
       setRawDataAPI(data.listGuest);
       setRawData(data.listGuest);
@@ -48,7 +47,6 @@ const GuestBookTableSection = ({ subMenu, setSubMenu, data }) => {
   };
 
   const handleSearchQueryChange = (text) => {
-    console.log(text);
     setSearchQuery(text);
     if (!text) {
       setRawData(rawDataAPI);
@@ -56,7 +54,6 @@ const GuestBookTableSection = ({ subMenu, setSubMenu, data }) => {
       setCurrentPage(1);
       setDataShown(rawDataAPI.slice(0, dataPerPage));
     } else {
-      console.log("searching");
       const filteredData = rawDataAPI.filter((item) =>
         item.name.toLowerCase().includes(text.toLowerCase())
       );

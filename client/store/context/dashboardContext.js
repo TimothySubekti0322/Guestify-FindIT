@@ -10,8 +10,6 @@ function DashboardContextProvider({ children }) {
   const [data, setData] = useState({});
 
   const handleData = (data) => {
-    console.log("dashboardContext is Hit");
-    console.log("data in dashboard context: ", data);
     setData(data);
   };
 
