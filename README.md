@@ -5,11 +5,11 @@ Guestify - "**transforms event planning from inception to memory, offering a sus
 ## Guestify Team
 
 <p align="center" style="margin: 60px 0px">
-  <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715251000/Group_376_rgkkxu.png" alt="Michael Sihotang" width="25%">
+  <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715343749/Group_373_posotu.png" alt="Michael Sihotang" width="25%">
   <img src="https://via.placeholder.com/100x1/0000/0000.png" alt="spacer" style="width: 5%;">
-  <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715251001/Group_377_iekbrd.png" alt="Timothy Subekti" width="25%">
+  <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715343749/Group_374_zq8lyz.png" alt="Timothy Subekti" width="25%">
     <img src="https://via.placeholder.com/100x1/0000/0000.png" alt="spacer" style="width: 5%;">
-  <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715251403/Group_378_1_p0o6ee.png" alt="Felisa Aidadora D" width="25%">
+  <img src="https://res.cloudinary.com/dlx2svkha/image/upload/v1715343749/Group_375_hqsa8d.png" alt="Felisa Aidadora D" width="25%">
 </p>
 
 ## Table of Contents
@@ -224,7 +224,7 @@ The Guestify team is composed of talented individuals who bring diverse skills a
 - **[Michael Sihotang](https://www.linkedin.com/in/michael-sihotang-9650bb215/)** As Hustler (Business Development Lead)
 - **[Timothy Subekti](https://github.com/TimothySubekti0322)** As Hacker (Technical Lead)
 - **[Felisa Aidadora Darmawan](https://www.linkedin.com/in/felisadarmawan/)** As Hipster (Design Lead)
-- 
+
 ## Feedback
 
 Your feedback is crucial for us to continue improving Guestify and providing the best possible experience. Whether it's a feature request, bug report, or general comments, we value your input.
