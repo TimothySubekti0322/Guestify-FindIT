@@ -79,7 +79,6 @@ router.post("/add", verifyToken, upload.single("file"), async (req, res) => {
     const fileRows = file.length - 2;
     const length = parseInt(guest) > fileRows ? fileRows : parseInt(guest);
 
-
     for (let i = 2; i < length + 2; i++) {
       if (file[i][1] !== null && file[i][2] !== null) {
         // Create Guest Entity
@@ -130,7 +129,7 @@ router.post("/add", verifyToken, upload.single("file"), async (req, res) => {
 
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-            res.status(500).json({ message: "Email Error", error: error });
+            console.log(error);
           } else {
             console.log("Email sent: " + info.response);
           }
