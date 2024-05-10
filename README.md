@@ -198,7 +198,7 @@ To make it easier for users and stakeholders to try out the Guestify app, we pro
 ### Android Application
 To download the latest version of the Guestify app for Android:
 
-**[Download Guestify APK](<Your APK URL>)**: 
+**[Download Guestify APK](https://drive.google.com/file/d/1V0s-RAKP1N0hOgQoyFbFVqcM_QolMQUL/view?usp=drive_link)**: 
 
 The APK file can be sideloaded onto your Android device. Follow these steps:
     
