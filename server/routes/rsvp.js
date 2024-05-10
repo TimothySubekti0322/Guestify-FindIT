@@ -122,7 +122,17 @@ router.post("/", verifyToken, async (req, res) => {
           parseInt(totalGuest)
         ),
       });
+
+      // Update QrCode in User
+      await db.collection("users").doc(req.email).collection("qrCode").add({
+        eventName: eventName,
+        date: date,
+        eventCode: eventCode,
+        qrCodeUrl: image_url,
+      });
     }
+
+    const totalGuestInput = rsvpStatus == "confirmed" ? totalGuest : 0;
 
     // Update Guest in Event
     await db
@@ -133,7 +143,7 @@ router.post("/", verifyToken, async (req, res) => {
       .update({
         rsvpStatus: rsvpStatus,
         qrCodeUrl: image_url,
-        totalGuest: totalGuest,
+        totalGuest: totalGuestInput,
       });
 
     // Update Event Code
@@ -141,14 +151,6 @@ router.post("/", verifyToken, async (req, res) => {
       .collection("eventCodes")
       .doc(eventCode)
       .update({ rsvpStatus: rsvpStatus });
-
-    // Update QrCode in User
-    await db.collection("users").doc(req.email).collection("qrCode").add({
-      eventName: eventName,
-      date: date,
-      eventCode: eventCode,
-      qrCodeUrl: image_url,
-    });
 
     return res.status(200).json({
       message: "success",
